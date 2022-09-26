@@ -5,20 +5,57 @@ set -e -u -o pipefail
 [ "${DEBUG:-0}" = "1" ] && set -x       # set DEBUG=1 to enable tracing
 VERSION="0.1"
 # ---------------------------------------------------------------------------------------- #
+
+# Regular Colors
+Black='\033[0;30m'        # Black
+Red='\033[0;31m'          # Red
+Green='\033[0;32m'        # Green
+Yellow='\033[0;33m'       # Yellow
+# Yellow='\033[41m'
+Blue='\033[0;34m'         # Blue
+Purple='\033[0;35m'       # Purple
+Cyan='\033[0;36m'         # Cyan
+White='\033[1;37m'        # White
+ClearColor='\033[0m'
+
+_commandIsSet=false
+_environmentIsSet=false
+_planFilePath=""
+_planFileName=""
+_timeStamp="NO"
+
 echoDefault() {
-    echo -e "${_terminalColorClear}$1${_terminalColorClear}"
+    echo -e "${ClearColor}$@${ClearColor}"
 }
  
 echoMessage() {
-    echo -e "${_terminalColorMessage}$1${_terminalColorClear}"
+    echo -e "${White}$@${ClearColor}"
 }
  
 echoWarning() {
-    echo -e "${_terminalColorWarning}$1${_terminalColorClear}"
+    echo -e "${Yellow}$@${ClearColor}"
 }
  
 echoError() {
-    echo -e "${_terminalColorError}$1${_terminalColorClear}"
+    echo -e "${Red}$@${ClearColor}"
+}
+
+
+ 
+echoResourceCreate() {
+    echo -e "${Green}$@${ClearColor}"
+}
+ 
+echoResourceModification() {
+    echo -e "${Yellow}$@${ClearColor}"
+}
+ 
+echoResourceRemove() {
+    echo -e "${Red}$@${ClearColor}"
+}
+
+echoResourceReCreate() {
+    echo -e "${Cyan}$@${ClearColor}"
 }
 
 help()
@@ -68,25 +105,14 @@ briefOutput() {
     resourceDropCreatesCount=${#resourceDropCreates[@]}
     resourceChangesCount=${#resourceChanges[@]}
 
-    [ "$resourceChangesCount" -gt 0 ] && echo ${resourceChanges[*]}
-    [ "$resourceCreationsCount" -gt 0 ] && echo ${resourceCreations[*]}
-    [ "$resourceDropCreatesCount" -gt 0 ] && echo ${resourceDropCreates[*]}
-    [ "$resourceDestroysCount" -gt 0 ] && echo ${resourceDestroys[*]}
+    [ "$resourceChangesCount" -gt 0 ] && echoResourceCreate ${resourceChanges[*]}
+    [ "$resourceCreationsCount" -gt 0 ] && echoResourceCreate ${resourceCreations[*]}
+    [ "$resourceDropCreatesCount" -gt 0 ] && echoResourceReCreate ${resourceDropCreates[*]}
+    [ "$resourceDestroysCount" -gt 0 ] && echoResourceRemove ${resourceDestroys[*]}
     
     echoMessage "${planSummaryLine[*]}"
 
 }
-
-_terminalColorClear='\033[0m'
-_terminalColorError='\033[1;31m'
-_terminalColorMessage='\033[1;33m'
-_terminalColorWarning='\033[1;34m'
-
-_commandIsSet=false
-_environmentIsSet=false
-_planFilePath=""
-_planFileName=""
-_timeStamp="NO"
 
 while getopts ":ha:e:Vt:" option; do
     case $option in
