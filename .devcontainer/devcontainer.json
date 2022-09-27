@@ -10,6 +10,7 @@
 			"INSTALL_NODE": "true",
 			"NODE_VERSION": "lts/*",
 			"INSTALL_AZURE_CLI": "true",
+			"INSTALL_AWS_CLI": "true",
 			"INSTALL_TERRAFORM": "true",
 			"TERRAFORM_FILE":"terraform_1.3.0_linux_amd64.zip",
 			"TERRAFORM_VERSION":"https://releases.hashicorp.com/terraform/1.3.0/terraform_1.3.0_linux_amd64.zip"
