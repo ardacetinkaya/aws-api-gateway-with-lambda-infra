@@ -85,10 +85,10 @@ briefOutput() {
 
     while IFS= read -r line
     do
-        [[ $line == *"+ resource"* ]] && { resourceCreations+=${line% *}; continue; }
-        [[ $line == *"~ resource"* ]] && { resourceChanges+=${line% *}; continue; }
-        [[ $line == *"- resource"* ]] && { resourceDestroys+=${line% *}; continue; }
-        [[ $line == *"-/+ resource"* ]] && { resourceDropCreates+=${line% *}; continue; }
+        [[ $line == *"+ resource "* ]] && { resourceCreations+=${line% *}"\r\n"; continue; }
+        [[ $line == *"~ resource "* ]] && { resourceChanges+=${line% *}; continue; }
+        [[ $line == *"- resource "* ]] && { resourceDestroys+=${line% *}; continue; }
+        [[ $line == *"-/+ resource "* ]] && { resourceDropCreates+=${line% *}; continue; }
         
         if [[ $line == *"Plan: "* ]]
         then
@@ -101,7 +101,8 @@ briefOutput() {
             continue;
         fi
     done < "$1"
-
+    
+    echoMessage ""
     resourceCreationsCount=${#resourceCreations[@]}
     resourceDestroysCount=${#resourceDestroys[@]}
     resourceDropCreatesCount=${#resourceDropCreates[@]}
