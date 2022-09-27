@@ -42,7 +42,7 @@ jobs:
 
     - name: Build, tag, and push image to Amazon ECR
       id: build-image
-      working-directory: ./src/webapi/HelloLambda.v1
+      working-directory: ./src/functions/HelloLambda.v1
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ github.sha }}

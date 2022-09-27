@@ -5,7 +5,7 @@ on: workflow_dispatch
 #   push:
 #     branches: [ "main" ]
 #     paths:
-#       - "./src/webapi"
+#       - "./src/functions"
 #   pull_request:
 #     branches: [ "main" ]
 
@@ -33,11 +33,11 @@ jobs:
         aws-region: ${{ env.AWS_REGION }}
 
     - name: Restore dependencies
-      working-directory: ./src/webapi/HelloLambda.v1
+      working-directory: ./src/functions/HelloLambda.v1
       run: dotnet restore
     - name: Build
-      working-directory: ./src/webapi/HelloLambda.v1
+      working-directory: ./src/functions/HelloLambda.v1
       run: dotnet build --no-restore
     - name: Deploy
-      working-directory: ./src/webapi/HelloLambda.v1
+      working-directory: ./src/functions/HelloLambda.v1
       run: dotnet lambda deploy-function HelloLambda
