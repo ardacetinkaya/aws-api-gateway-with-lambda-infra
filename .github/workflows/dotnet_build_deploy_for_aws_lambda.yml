@@ -3,6 +3,8 @@ name: .NET
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - "./src/webapi"
   pull_request:
     branches: [ "main" ]
 
@@ -20,8 +22,8 @@ jobs:
     - name: Install Amazon.Lambda.Tools
       run: dotnet tool install -g Amazon.Lambda.Tools
     - name: Restore dependencies
-      working-directory: /src/webapi/HelloLambda.v1
+      working-directory: ./src/webapi/HelloLambda.v1
       run: dotnet restore
     - name: Build
-      working-directory: /src/webapi/HelloLambda.v1
+      working-directory: ./src/webapi/HelloLambda.v1
       run: dotnet build --no-restore
