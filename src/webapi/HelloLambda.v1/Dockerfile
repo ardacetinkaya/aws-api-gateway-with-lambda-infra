@@ -11,10 +11,9 @@ USER appuser
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0-focal AS build
 WORKDIR /src
-COPY ["src/webapi/HelloLambda.v1/HelloLambda.v1.csproj", "src/webapi/HelloLambda.v1/"]
-RUN dotnet restore "src/webapi/HelloLambda.v1/HelloLambda.v1.csproj"
+COPY ["HelloLambda.v1.csproj", "HelloLambda.v1/"]
+WORKDIR /src/HelloLambda.v1
 COPY . .
-WORKDIR "/src/src/webapi/HelloLambda.v1"
 RUN dotnet build "HelloLambda.v1.csproj" -c Release -o /app/build
 
 FROM build AS publish
