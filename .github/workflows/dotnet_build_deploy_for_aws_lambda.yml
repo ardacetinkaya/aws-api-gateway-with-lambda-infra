@@ -28,3 +28,6 @@ jobs:
     - name: Build
       working-directory: ./src/webapi/HelloLambda.v1
       run: dotnet build --no-restore
+    - name: Deploy
+      working-directory: ./src/webapi/HelloLambda.v1
+      run: dotnet lambda deploy-function HelloLambda
