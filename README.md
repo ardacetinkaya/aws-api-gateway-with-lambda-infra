@@ -8,7 +8,7 @@
 
 ```yaml
 - src
---- artifacts     #
+--- webapi        # Function apps.
 --- environments  # Environment abstraction for provisioning
 ----- test        # Environment name can be 'test', 'prod', 'foo', 'xyz'...etc. 
 ------- _outputs  # Logs for terraform.
