@@ -60,17 +60,18 @@ echoResourceReCreate() {
 
 help()
 {
-   echo "Add description of the script functions here."
-   echo
-   echo "Syntax: ./provision.sh [-a|h|e|V]"
    echo ""
-   echo "Option     Description"
+   echo "Helps to provision your terraform resources."
+   echoMessage "Syntax:"
+   echo "   ./provision.sh [-a|h|e|V]"
+   echo ""
+   echoMessage "Option     Description"
    echo " -a        Action for provisioning. init|plan|apply|destroy|validate"
    echo " -e        Provisioning environment."
    echo " -h        Print help."
    echo " -V        Print software version and exit."
    echo ""
-   echo "Example:"
+   echoMessage "Example:"
    echo "   ./provision.sh -a plan -e test"
    echo ""
 }
@@ -111,6 +112,7 @@ briefOutput() {
     [ "$resourceDropCreatesCount" -gt 0 ] && echoResourceReCreate ${resourceDropCreates[*]}
     [ "$resourceDestroysCount" -gt 0 ] && echoResourceRemove ${resourceDestroys[*]}
     
+    echoMessage ""
     echoMessage "${planSummary[*]}"
 
 }
