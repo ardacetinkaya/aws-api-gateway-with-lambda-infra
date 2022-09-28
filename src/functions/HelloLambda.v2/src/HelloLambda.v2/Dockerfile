@@ -11,7 +11,7 @@ COPY . .
 RUN dotnet build "HelloLambda.v2.csproj" -c Release -o /app/build --runtime linux-x64
 
 FROM build AS publish
-RUN dotnet publish "HelloLambda.v2.csproj" -c Release -o /app/publish --runtime linux-x64
+RUN dotnet publish "HelloLambda.v2.csproj" -c Release -o /app/publish --self-contained false --runtime linux-x64
 
 FROM base AS final
 WORKDIR /var/task

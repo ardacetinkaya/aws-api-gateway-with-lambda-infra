@@ -79,7 +79,7 @@ resource "aws_lambda_function" "hello_lambda_v2" {
   timeout             = local.lambda.timeout
 
   package_type        = "Image"
-  image_uri           = "${aws_ecr_repository.test_repository.repository_url}:a0b5cfa4309c72cda864bba2227f1ad5ae355e5a"
+  image_uri           = "${aws_ecr_repository.test_repository.repository_url}:d5be23f3c63e0bb4b189e61f128a219f4fcc7c5d"
   image_config {
     command = ["HelloLambda.v2::HelloLambda.v2.LambdaEntryPoint::FunctionHandlerAsync"]
   }
