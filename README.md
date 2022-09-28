@@ -40,7 +40,7 @@ Started... [2022-09-27 09:27:31]
 + resource "aws_api_gateway_deployment" "deployment_01"
  + resource "aws_api_gateway_integration" "integration_01"
  + resource "aws_iam_role" "iam_for_HelloLambda"
- + resource "aws_lambda_function" "hello_lambda"
+ + resource "aws_lambda_function" "hello_lambda_v1"
  + resource "aws_lambda_function_url" "hello_lambda_url"
  + resource "aws_lambda_permission" "apigw_lambda"
  + resource "aws_resourcegroups_group" "test"

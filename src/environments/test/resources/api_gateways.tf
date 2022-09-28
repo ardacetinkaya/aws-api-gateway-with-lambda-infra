@@ -49,7 +49,7 @@ EOF
 resource "aws_lambda_permission" "apigw_lambda" {
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.hello_lambda.function_name
+  function_name = aws_lambda_function.hello_lambda_v1.function_name
   principal     = "apigateway.amazonaws.com"
 
   source_arn = "${aws_api_gateway_rest_api.hello_lambda_api.execution_arn}/*/*/*"
@@ -57,10 +57,6 @@ resource "aws_lambda_permission" "apigw_lambda" {
 
 data "aws_api_gateway_rest_api" "name" {
   name = aws_api_gateway_rest_api.hello_lambda_api.name
-}
-
-output "deneme" {
-  value = data.aws_api_gateway_rest_api.name
 }
 
 resource "aws_api_gateway_method_response" "response_200" {

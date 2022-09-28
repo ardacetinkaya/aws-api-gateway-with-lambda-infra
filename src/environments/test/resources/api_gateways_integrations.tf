@@ -4,7 +4,7 @@ resource "aws_api_gateway_integration" "integration_01" {
   http_method             = aws_api_gateway_method.get_method_01.http_method
   integration_http_method = "GET"
   type                    = "HTTP"
-  uri                     = "${data.aws_lambda_function_url.hello_lambda_url.function_url}weatherforecast"
+  uri                     = "${data.aws_lambda_function_url.hello_lambda_v1_url.function_url}weatherforecast"
 }
 
 resource "aws_api_gateway_integration" "integration_02" {
@@ -13,6 +13,6 @@ resource "aws_api_gateway_integration" "integration_02" {
   http_method             = aws_api_gateway_method.post_method_02.http_method
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = aws_lambda_function.hello_lambda.invoke_arn
+  uri                     = aws_lambda_function.hello_lambda_v1.invoke_arn
   
 }

@@ -47,7 +47,7 @@ resource "aws_iam_policy" "ecr_policy_00" {
   })
 }
 
-resource "aws_lambda_function" "hello_lambda" {
+resource "aws_lambda_function" "hello_lambda_v1" {
   function_name       = local.lambda.function_v1_name
   filename            = "${path.module}/../../../artifacts/HelloLambda.zip"
   role                = aws_iam_role.iam_for_HelloLambda.arn
@@ -94,20 +94,38 @@ resource "aws_lambda_function" "hello_lambda_v2" {
   provider = aws.primary-region
 }
 
-resource "aws_lambda_function_url" "hello_lambda_url" {
-  function_name      = aws_lambda_function.hello_lambda.function_name
+resource "aws_lambda_function_url" "hello_lambda_v1_url" {
+  function_name      = aws_lambda_function.hello_lambda_v1.function_name
   authorization_type = "NONE"
 
   depends_on = [
-    aws_lambda_function.hello_lambda
+    aws_lambda_function.hello_lambda_v1
   ]
 }
 
-data "aws_lambda_function_url" "hello_lambda_url" {
+resource "aws_lambda_function_url" "hello_lambda_v2_url" {
+  function_name      = aws_lambda_function.hello_lambda_v2.function_name
+  authorization_type = "NONE"
+
+  depends_on = [
+    aws_lambda_function.hello_lambda_v2
+  ]
+}
+
+data "aws_lambda_function_url" "hello_lambda_v2_url" {
+  function_name     = local.lambda.function_v2_name
+
+  depends_on = [
+    aws_lambda_function.hello_lambda_v2,
+    aws_lambda_function_url.hello_lambda_v2_url
+  ]
+}
+
+data "aws_lambda_function_url" "hello_lambda_v1_url" {
   function_name     = local.lambda.function_v1_name
 
   depends_on = [
-    aws_lambda_function.hello_lambda,
-    aws_lambda_function_url.hello_lambda_url
+    aws_lambda_function.hello_lambda_v1,
+    aws_lambda_function_url.hello_lambda_v1_url
   ]
 }
