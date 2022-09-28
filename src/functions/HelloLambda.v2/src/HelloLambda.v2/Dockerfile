@@ -11,7 +11,7 @@ COPY . .
 RUN dotnet build "HelloLambda.v2.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "HelloLambda.v2.csproj" -c Release -o /app/publish /p:UseAppHost=false --no-restore
+RUN dotnet publish "HelloLambda.v2.csproj" -c Release -o /app/publish --no-restore
 
 FROM base AS final
 WORKDIR /var/task
