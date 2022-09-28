@@ -2,7 +2,7 @@ FROM public.ecr.aws/lambda/dotnet:6 AS base
 WORKDIR /var/task
 
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0-focal AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0-bullseye-slim AS build
 WORKDIR /src
 COPY ["HelloLambda.v2.csproj", "HelloLambda.v2/"]
 WORKDIR "/src/HelloLambda.v2"
