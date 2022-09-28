@@ -4,10 +4,9 @@ WORKDIR /var/task
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0-focal AS build
 WORKDIR /src
-COPY ["src/functions/HelloLambda.v2/src/HelloLambda.v2/HelloLambda.v2.csproj", "src/functions/HelloLambda.v2/src/HelloLambda.v2/"]
-RUN dotnet restore "src/functions/HelloLambda.v2/src/HelloLambda.v2/HelloLambda.v2.csproj"
+COPY ["HelloLambda.v2/HelloLambda.v2.csproj", "HelloLambda.v2/"]
+WORKDIR "/src/HelloLambda.v2"
 COPY . .
-WORKDIR "/src/src/functions/HelloLambda.v2/src/HelloLambda.v2"
 RUN dotnet build "HelloLambda.v2.csproj" -c Release -o /app/build
 
 FROM build AS publish
