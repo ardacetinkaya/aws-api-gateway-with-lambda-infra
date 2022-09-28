@@ -1,4 +1,4 @@
-name: .NET
+name: v1 - .NET
 
 on: workflow_dispatch
 # on:
