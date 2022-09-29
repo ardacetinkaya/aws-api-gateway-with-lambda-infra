@@ -5,7 +5,7 @@
 #    Replace the value of the `ECR_REPOSITORY` environment variable in the workflow below with your repository's name.
 #    Replace the value of the `AWS_REGION` environment variable in the workflow below with your repository's region.
 
-name: Deploy v1 to Amazon ECR
+name: Docker build for v1 to Amazon ECR
 
 on: workflow_dispatch
 # on:
