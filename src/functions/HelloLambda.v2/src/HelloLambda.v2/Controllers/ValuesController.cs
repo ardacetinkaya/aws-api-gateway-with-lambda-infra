@@ -5,6 +5,12 @@ namespace HelloLambda.v2.Controllers;
 [Route("api/[controller]")]
 public class ValuesController : ControllerBase
 {
+
+    private readonly ILogger _logger;
+    public ValuesController(ILogger logger){
+        _logger = logger;
+    }
+
     // GET api/values
     [HttpGet]
     public IEnumerable<string> Get()
@@ -16,13 +22,17 @@ public class ValuesController : ControllerBase
     [HttpGet("{id}")]
     public string Get(int id)
     {
-        return "value";
+        _logger.LogInformation("GET");
+        return $"value-{id.ToString()}";
     }
 
     // POST api/values
     [HttpPost]
     public void Post([FromBody]string value)
     {
+
+        _logger.LogInformation("POST");
+        _logger.LogInformation($"Some data {value}");
     }
 
     // PUT api/values/5
