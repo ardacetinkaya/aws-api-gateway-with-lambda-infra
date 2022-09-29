@@ -1,4 +1,4 @@
-name: v1 - .NET
+name: dotnet lambda deploy for v2
 
 on: workflow_dispatch
 # on:

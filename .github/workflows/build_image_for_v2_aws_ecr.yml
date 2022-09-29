@@ -5,12 +5,19 @@
 #    Replace the value of the `ECR_REPOSITORY` environment variable in the workflow below with your repository's name.
 #    Replace the value of the `AWS_REGION` environment variable in the workflow below with your repository's region.
 
-name: Deploy v2 to Amazon ECR
+name: Docker build for v2 to Amazon ECR
 
-on: workflow_dispatch
-# on:
-#   push:
-#     branches: [ "main" ]
+on: 
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'     
+        required: true
+        default: 'warning'
+  push:
+    branches: [ "main" ]
+    paths:
+      - "./src/functions/HelloLambda.v2/src"
 
 env:
   AWS_REGION: eu-north-1                  # set this to your preferred AWS region, e.g. us-west-1
