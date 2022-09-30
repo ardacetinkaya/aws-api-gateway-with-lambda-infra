@@ -26,9 +26,14 @@ resource "aws_iam_role" "iam_for_HelloLambda" {
 }
 EOF
   managed_policy_arns = [
-    aws_iam_policy.ecr_policy_00.arn
+    aws_iam_policy.ecr_policy_00.arn,
+    data.aws_iam_policy.AWSLambdaBasicExecutionRole.arn
   ]
 
+}
+
+data "aws_iam_policy" "AWSLambdaBasicExecutionRole" {
+  name = "AWSLambdaBasicExecutionRole"
 }
 
 resource "aws_iam_policy" "ecr_policy_00" {
@@ -79,7 +84,7 @@ resource "aws_lambda_function" "hello_lambda_v2" {
   timeout             = local.lambda.timeout
 
   package_type        = "Image"
-  image_uri           = "${aws_ecr_repository.test_repository.repository_url}:d5be23f3c63e0bb4b189e61f128a219f4fcc7c5d"
+  image_uri           = "${aws_ecr_repository.test_repository.repository_url}:f718176e08bca4e2628cbf6f2bd57f5b644c2627"
   image_config {
     command = ["HelloLambda.v2::HelloLambda.v2.LambdaEntryPoint::FunctionHandlerAsync"]
   }
