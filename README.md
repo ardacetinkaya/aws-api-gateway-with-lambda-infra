@@ -1,5 +1,17 @@
 ## A learning journey for AWS API Gateway and Lambda w/ Terraform
 
+- I don't have any experience with `AWS Lambda` and `AWS API Gateway`
+    - So this is a simple repo. that I try to dig a little more.
+- For `AWS Lambda` functions I have choosen .NET Platform to see what is required for .NET aspect
+    - I have also tried `Amazon.Lambda.Tools` tool for .NET
+
+    > dotnet tool update -g Amazon.Lambda.Tools
+    
+    - I have done with standart ASP.NET Core Web API and with some other project templates that can be installed via;
+
+    > dotnet new --install Amazon.Lambda.Templates
+
+- Also for deployments and container image builds, `GitHub Actions` are used
 
 - All provision is done with a bash `provision.sh`
     - It is a simple wrapper for `terraform` to have easy management of resource provosioning
@@ -27,10 +39,11 @@
 
 ### Provisioning the resources
 
+- I have created a simple `bash` script to wrap `terraform`
+    - I don't have some much experience with writing `a good` bash script, so please feel free to help me do :) :) :)
 - Execute the following command to take a `plan` for `test` environment
 
 > ./provision.sh -a plan -e test`
-
 
 - Sample output
 
@@ -65,3 +78,8 @@ Please check plan output. If plan is correct, apply it;
 
 - If plan seems to be fine then execute following to `apply` the plan
 > ./provision.sh -a apply -e test -t 1664270851
+
+### Functions
+
+- Different .NET application models are used for `AWS Lambda`
+- Within some `AWS Lambda` requierments different kind of APIs and models are required
