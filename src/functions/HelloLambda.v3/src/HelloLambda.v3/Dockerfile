@@ -1,13 +1,19 @@
-FROM public.ecr.aws/lambda/dotnet:6
-
+FROM public.ecr.aws/lambda/dotnet:6 AS base
 WORKDIR /var/task
 
-# This COPY command copies the .NET Lambda project's build artifacts from the host machine into the image. 
-# The source of the COPY should match where the .NET Lambda project publishes its build artifacts. If the Lambda function is being built 
-# with the AWS .NET Lambda Tooling, the `--docker-host-build-output-dir` switch controls where the .NET Lambda project
-# will be built. The .NET Lambda project templates default to having `--docker-host-build-output-dir`
-# set in the aws-lambda-tools-defaults.json file to "bin/Release/lambda-publish".
-#
-# Alternatively Docker multi-stage build could be used to build the .NET Lambda project inside the image.
-# For more information on this approach checkout the project's README.md file.
-COPY "bin/Release/lambda-publish"  .
+
+FROM mcr.microsoft.com/dotnet/sdk:6.0-bullseye-slim AS build
+WORKDIR /src
+COPY ["HelloLambda.v3.csproj", "HelloLambda.v3/"]
+WORKDIR "/src/HelloLambda.v3"
+RUN dotnet restore "HelloLambda.v3.csproj" --runtime linux-x64
+COPY . .
+RUN dotnet build "HelloLambda.v3.csproj" -c Release -o /app/build --runtime linux-x64
+
+FROM build AS publish
+RUN dotnet publish "HelloLambda.v3.csproj" -c Release -o /app/publish --self-contained false --runtime linux-x64
+
+FROM base AS final
+WORKDIR /var/task
+COPY --from=publish /app/publish .
+CMD [ "HelloLambda.v3::HelloLambda.v3.Functions::Get"]
