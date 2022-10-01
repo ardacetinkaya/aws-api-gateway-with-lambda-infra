@@ -2,7 +2,7 @@ locals {
   lambda = {
     function_v1_name   = "HelloLambda_v1"
     function_v2_name   = "HelloLambda_v2"
-    function_v2_name   = "HelloLambda_v3"
+    function_v3_name   = "HelloLambda_v3"
     runtime         = "dotnet6"
     memory_size     = 128
     timeout         = 10
