@@ -157,6 +157,15 @@ TEMP_FOLDER_PATH=${ENVIRONMENT_FOLDER}'/_temps'
 OUTPUTS_FOLDER_PATH=${ENVIRONMENT_FOLDER}'/_outputs'
 STATE_FILE_NAME="terraform.tfstate"
 
+STATE_FILE_STORAGE_NAME=""
+REGION=""
+
+while IFS= read -r line
+do
+  [[ $line == "state_file_s3_bucket" ]] && { STATE_FILE_STORAGE_NAME=(${line//=/ }); continue; }
+  [[ $line == "region" ]] && { REGION=(${line//=/ }); continue; }
+  
+done < $TFVAR_FILE_PATH
 
 case $_command in
   init)
@@ -199,7 +208,9 @@ echoDefault "Started... [${CURRENT_DATE_TIME_STAMP}]"
 
 if [ "${_command}" == 'init' ]
 then
-    terraform -chdir=${ENVIRONMENT_RESOURCES_FOLDER} init -upgrade=true -no-color \
+    terraform -chdir=${ENVIRONMENT_RESOURCES_FOLDER} init -upgrade=true -no-color -force-copy \
+        -backend-config bucket=${STATE_FILE_STORAGE_NAME[1]} \
+        -backend-config region=${REGION[1]} \
         -backend-config key=${STATE_FILE_NAME} > $_outputFilePath
 
 elif [ "${_command}" == 'plan' ]
