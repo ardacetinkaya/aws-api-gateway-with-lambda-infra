@@ -37,6 +37,12 @@
 --- provision.sh  # bash script to run terraform commands
 ```
 
+### Functions
+----------------------
+- Different .NET application models are used for `AWS Lambda`
+- Within some `AWS Lambda` requierments different kind of APIs and models are required
+  - To check models, we need to check and understand new `dotnet project templates`
+
 ### Provisioning the resources
 ----------------------
 - I have created a simple `bash` script to wrap `terraform`
@@ -81,7 +87,3 @@
 
     > ./provision.sh -a apply -e test -t 1664270851
 
-### Functions
-----------------------
-- Different .NET application models are used for `AWS Lambda`
-- Within some `AWS Lambda` requierments different kind of APIs and models are required
