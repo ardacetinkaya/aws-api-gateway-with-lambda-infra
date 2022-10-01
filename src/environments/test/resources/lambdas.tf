@@ -2,6 +2,7 @@ locals {
   lambda = {
     function_v1_name   = "HelloLambda_v1"
     function_v2_name   = "HelloLambda_v2"
+    function_v2_name   = "HelloLambda_v3"
     runtime         = "dotnet6"
     memory_size     = 128
     timeout         = 10
@@ -75,7 +76,6 @@ resource "aws_lambda_function" "hello_lambda_v1" {
   provider = aws.primary-region
 }
 
-
 resource "aws_lambda_function" "hello_lambda_v2" {
   function_name       = local.lambda.function_v2_name
   role                = aws_iam_role.iam_for_HelloLambda.arn
@@ -87,6 +87,29 @@ resource "aws_lambda_function" "hello_lambda_v2" {
   image_uri           = "${aws_ecr_repository.test_repository.repository_url}:f718176e08bca4e2628cbf6f2bd57f5b644c2627"
   image_config {
     command = ["HelloLambda.v2::HelloLambda.v2.LambdaEntryPoint::FunctionHandlerAsync"]
+  }
+
+  environment {
+    variables = {
+      test="test"
+      ASPNETCORE_ENVIRONMENT="Development"
+    }
+  }
+
+  provider = aws.primary-region
+}
+
+resource "aws_lambda_function" "hello_lambda_v3" {
+  function_name       = local.lambda.function_v3_name
+  role                = aws_iam_role.iam_for_HelloLambda.arn
+
+  memory_size         = local.lambda.memory_size
+  timeout             = local.lambda.timeout
+
+  package_type        = "Image"
+  image_uri           = "${aws_ecr_repository.test_repository.repository_url}:1319fd25ce98fa435687d367ed42e96c30718c13"
+  image_config {
+    command = ["HelloLambda.v3::HelloLambda.v3.Functions::Get"]
   }
 
   environment {
@@ -117,14 +140,15 @@ resource "aws_lambda_function_url" "hello_lambda_v2_url" {
   ]
 }
 
-data "aws_lambda_function_url" "hello_lambda_v2_url" {
-  function_name     = local.lambda.function_v2_name
+resource "aws_lambda_function_url" "hello_lambda_v3_url" {
+  function_name      = aws_lambda_function.hello_lambda_v3.function_name
+  authorization_type = "NONE"
 
   depends_on = [
-    aws_lambda_function.hello_lambda_v2,
-    aws_lambda_function_url.hello_lambda_v2_url
+    aws_lambda_function.hello_lambda_v3
   ]
 }
+
 
 data "aws_lambda_function_url" "hello_lambda_v1_url" {
   function_name     = local.lambda.function_v1_name
@@ -134,3 +158,14 @@ data "aws_lambda_function_url" "hello_lambda_v1_url" {
     aws_lambda_function_url.hello_lambda_v1_url
   ]
 }
+
+data "aws_lambda_function_url" "hello_lambda_v2_url" {
+  function_name     = local.lambda.function_v2_name
+
+  depends_on = [
+    aws_lambda_function.hello_lambda_v2,
+    aws_lambda_function_url.hello_lambda_v2_url
+  ]
+}
+
+
