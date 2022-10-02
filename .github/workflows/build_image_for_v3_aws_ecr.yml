@@ -58,9 +58,9 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: v3-${{ github.sha }}
       run: |
-        tag='v3-${{ github.sha }}'
+        tag='unknown'
         if [[ ${{ github.event.inputs.use-fixed-tag }} != true ]]; then
-
+          tag='v3-${{ github.sha }}'
         else
           tag='v3-latest'
         fi
