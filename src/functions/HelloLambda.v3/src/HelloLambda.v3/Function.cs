@@ -28,6 +28,7 @@ public class Functions
 
         request.QueryStringParameters.TryGetValue("name",out string? name);
         
+        
         var response = new APIGatewayProxyResponse
         {
             StatusCode = (int)HttpStatusCode.OK,
