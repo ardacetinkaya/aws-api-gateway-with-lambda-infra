@@ -1,13 +1,10 @@
-name: dotnet lambda deploy for v2
-
-on: workflow_dispatch
-# on:
-#   push:
-#     branches: [ "main" ]
-#     paths:
-#       - "./src/functions"
-#   pull_request:
-#     branches: [ "main" ]
+name: dotnet lambda deploy for v1
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+    paths:
+      - "src/functions/HelloLambda.v1/**"
 
 env:
   AWS_REGION: eu-north-1 
@@ -22,7 +19,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 6.0.1
     - name: Install Amazon.Lambda.Tools
       run: dotnet tool install -g Amazon.Lambda.Tools
     - name: Configure AWS credentials
