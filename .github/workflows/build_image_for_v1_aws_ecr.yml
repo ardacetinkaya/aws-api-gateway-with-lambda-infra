@@ -7,10 +7,13 @@
 
 name: Docker build for v1 to Amazon ECR
 
-on: workflow_dispatch
-# on:
-#   push:
-#     branches: [ "main" ]
+on: 
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Default Tag for image'     
+        required: true
+        default: 'latest'
 
 env:
   AWS_REGION: eu-north-1                  # set this to your preferred AWS region, e.g. us-west-1
@@ -45,7 +48,7 @@ jobs:
       working-directory: ./src/functions/HelloLambda.v1
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: ${{ github.sha }}
+        IMAGE_TAG: v1-${{ github.event.inputs.tag }}
       run: |
         # Build a docker container and push it to ECR
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
