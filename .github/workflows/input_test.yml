@@ -3,29 +3,17 @@ name: Mixed inputs
 on:
   workflow_dispatch:
     inputs:
-      name:
-        description: Who to greet
-        type: choice
-        required: false
-        options: 
-        - monalisa
-        - cschleiden
-      message:
-        description: Some message
-        required: true
-      use-emoji:
-        description: Include 🎉🤣 emojis
+      isChecked:
+        description: Some flag
         required: false
         type: boolean
-      environment:
-        description: Environment info
-        required: false
-        type: environment
-
 jobs:
   greet:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Send greeting
-      run: echo "${{ github.event.inputs.message }} ${{ fromJSON('["", "🥳"]')[github.event.inputs.use-emoji == 'true'] }} ${{ github.event.inputs.name }}"
+    - name: Checked
+      if: ${{ github.event.inputs.isChecked == 'true' }}
+      run: echo "Checked"
+    - name: Not Checked
+      if: ${{ github.event.inputs.isChecked != 'true' }}
+      run: echo "Not Checked"
