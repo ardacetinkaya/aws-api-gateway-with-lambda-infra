@@ -52,11 +52,25 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v1
 
     - name: Build, tag, and push image to Amazon ECR
+      if: ${{ github.event.inputs.use-fixed-tag == 'true' }}
       id: build-image
       working-directory: ./src/functions/HelloLambda.v3/src/HelloLambda.v3
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: v3-${{ fromJSON('[${{ github.sha }}, "latest"]')[github.event.inputs.use-fixed-tag == 'true'] }}    # ${{ github.sha }}
+        IMAGE_TAG: v3-latest    # ${{ github.sha }}
+      run: |
+        # Build a docker container and push it to ECR
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+    - name: Build, tag, and push image to Amazon ECR
+      if: ${{ github.event.inputs.use-fixed-tag != 'true' }}
+      id: build-image
+      working-directory: ./src/functions/HelloLambda.v3/src/HelloLambda.v3
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: v3-${{ github.sha }}
       run: |
         # Build a docker container and push it to ECR
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
