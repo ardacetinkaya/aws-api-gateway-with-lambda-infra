@@ -38,3 +38,4 @@ Step Functions Hello World                            serverless.StepFunctionsHe
 - HelloLambda.v1: `dotnet new  webapi -n HelloLambda.v1`
 - HelloLambda.v2: `dotnet new  serverless.image.AspNetCoreWebAPI -n HelloLambda.v2`
 - HelloLambda.v3: `dotnet new  serverless.image.EmptyServerless -n HelloLambda.v3`
+- HelloLambda.v4: `dotnet new  lambda.image.EmptyFunction -n HelloLambda.v4`
