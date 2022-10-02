@@ -26,10 +26,12 @@ public class Functions
     {
         context.Logger.LogInformation("Get Request\n");
 
+        request.QueryStringParameters.TryGetValue("name",out string? name);
+        
         var response = new APIGatewayProxyResponse
         {
             StatusCode = (int)HttpStatusCode.OK,
-            Body = "Hello AWS Serverless",
+            Body = $"Hello AWS Serverless {name ?? $"This is {name}"}",
             Headers = new Dictionary<string, string> { { "Content-Type", "text/plain" } }
         };
 
