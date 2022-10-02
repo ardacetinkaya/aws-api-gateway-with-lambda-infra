@@ -11,11 +11,11 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Default Tag for image'     
+        description: 'Custom Tag for image'     
         required: true
         default: 'latest'
       use-fixed-tag:
-        description: Default Latest Tag for image
+        description: Use Latest Tag for image
         required: false
         type: boolean
   push:
@@ -58,7 +58,7 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: v3-${{ github.sha }}
       run: |
-        tag= 'v3-${{ github.sha }}'
+        tag='v3-${{ github.sha }}'
         if [[ ${{ github.event.inputs.use-fixed-tag }} != true ]]; then
 
         else
