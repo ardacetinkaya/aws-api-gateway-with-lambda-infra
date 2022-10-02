@@ -52,7 +52,7 @@ jobs:
       working-directory: ./src/functions/HelloLambda.v3/src/HelloLambda.v3
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: ${{ github.sha }}
+        IMAGE_TAG: v3-latest    # ${{ github.sha }}
       run: |
         # Build a docker container and push it to ECR
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
