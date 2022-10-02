@@ -1,10 +1,10 @@
 name: dotnet lambda deploy for v1
 on:
   workflow_dispatch:
-  push:
-    branches: [ "main" ]
-    paths:
-      - "src/functions/HelloLambda.v1/**"
+  # push:
+  #   branches: [ "main" ]
+  #   paths:
+  #     - "src/functions/HelloLambda.v1/**"
 
 env:
   AWS_REGION: eu-north-1 

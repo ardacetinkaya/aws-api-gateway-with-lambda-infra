@@ -19,10 +19,10 @@ on:
         required: false
         type: boolean
         default: true
-  push:
-    branches: [ "main" ]
-    paths:
-      - "src/functions/HelloLambda.v4/src/**"
+  # push:
+  #   branches: [ "main" ]
+  #   paths:
+  #     - "src/functions/HelloLambda.v4/src/**"
 
 env:
   AWS_REGION: eu-north-1                  # set this to your preferred AWS region, e.g. us-west-1
