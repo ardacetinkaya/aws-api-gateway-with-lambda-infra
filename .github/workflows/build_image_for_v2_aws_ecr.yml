@@ -11,9 +11,13 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Default Tag for image'     
+        description: 'Custom Tag for image'     
         required: true
         default: 'latest'
+      use-fixed-tag:
+        description: Use Latest Tag for image
+        required: false
+        type: boolean
   push:
     branches: [ "main" ]
     paths:
@@ -52,9 +56,15 @@ jobs:
       working-directory: ./src/functions/HelloLambda.v2/src/HelloLambda.v2
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: v2-${{ github.event.inputs.tag }}
+        IMAGE_TAG: v2-${{ github.sha }}
       run: |
+        tag='unknown'
+        if [[ ${{ github.event.inputs.use-fixed-tag }} != true ]]; then
+          tag='v2-${{ github.sha }}'
+        else
+          tag='v2-latest'
+        fi
         # Build a docker container and push it to ECR
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$tag .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$tag
+        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$tag"
