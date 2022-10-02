@@ -85,10 +85,10 @@ briefOutput() {
 
     while IFS= read -r line
     do
-        [[ $line == *"+ resource "* ]] && { resourceCreations+=${line% *}"\n"; continue; }
-        [[ $line == *"~ resource "* ]] && { resourceChanges+=${line% *}"\n"; continue; }
-        [[ $line == *"- resource "* ]] && { resourceDestroys+=${line% *}"\n"; continue; }
-        [[ $line == *"-/+ resource "* ]] && { resourceDropCreates+=${line% *}"\n"; continue; }
+        [[ $line == "+ resource "* ]] && { resourceCreations+=${line% *}"\n"; continue; }
+        [[ $line == "~ resource "* ]] && { resourceChanges+=${line% *}"\n"; continue; }
+        [[ $line == "- resource "* ]] && { resourceDestroys+=${line% *}"\n"; continue; }
+        [[ $line == "+/- resource "* ]] && { resourceDropCreates+=${line% *}"\n"; continue; }
         
         if [[ $line == *"Plan: "* ]]
         then
@@ -102,20 +102,13 @@ briefOutput() {
         fi
     done < "$1"
     
-    echoMessage ""
-    resourceCreationsCount=${#resourceCreations[@]}
-    resourceDestroysCount=${#resourceDestroys[@]}
-    resourceDropCreatesCount=${#resourceDropCreates[@]}
-    resourceChangesCount=${#resourceChanges[@]}
 
-    [ "$resourceChangesCount" -gt 0 ] && echoResourceModification ${resourceChanges[*]}
-    [ "$resourceCreationsCount" -gt 0 ] && echoResourceCreate ${resourceCreations[*]}
-    [ "$resourceDropCreatesCount" -gt 0 ] && echoResourceReCreate ${resourceDropCreates[*]}
-    [ "$resourceDestroysCount" -gt 0 ] && echoResourceRemove ${resourceDestroys[*]}
+    [ ${#resourceChanges[@]} -gt 0 ] && echoResourceModification ${resourceChanges[*]}
+    [ ${#resourceCreations[@]} -gt 0 ] && echoResourceCreate ${resourceCreations[*]}
+    [ ${#resourceDropCreates[@]} -gt 0 ] && echoResourceReCreate ${resourceDropCreates[*]}
+    [ ${#resourceDestroys[@]} -gt 0 ] && echoResourceRemove ${resourceDestroys[*]}
     
-    echoMessage ""
     echoMessage "${planSummary[*]}"
-
 }
 
 while getopts ":ha:e:Vt:" option; do
