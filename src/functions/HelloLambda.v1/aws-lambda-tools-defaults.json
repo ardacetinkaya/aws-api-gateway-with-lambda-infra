@@ -4,8 +4,8 @@
     "function-runtime": "dotnet6",
     "function-memory-size": 128,
     "function-timeout": 10,
-    "function-handler": "HelloLambda",
+    "function-handler": "HelloLambda_v1",
     "function-name": "HelloLambda_v1",
-    "environment-variables": "ASPNETCORE_ENVIRONMENT=Development;",
+    "environment-variables": "ASPNETCORE_ENVIRONMENT=Development;SomeEnvVariable=This is some ENV Value",
     "function-url-enable": true
   }
