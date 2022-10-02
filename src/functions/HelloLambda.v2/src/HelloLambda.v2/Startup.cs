@@ -21,7 +21,7 @@ public class Startup
         services.AddSingleton(typeof(ILogger), typeof(Logger<Startup>)); 
 
         services.AddControllers();
-        services.AddAWSLambdaHosting(LambdaEventSource.RestApi);
+        services.AddAWSLambdaHosting(LambdaEventSource.HttpApi);
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
