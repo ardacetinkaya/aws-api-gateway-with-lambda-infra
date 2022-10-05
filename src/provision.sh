@@ -156,13 +156,11 @@ REGION=""
 echo "TFVAR FILE: ${TFVAR_FILE_PATH}"
 while IFS= read -r line
 do
-  [[ $line == "state_file_s3_bucket" ]] && { STATE_FILE_STORAGE_NAME=(${line//=/ }); continue; }
-  [[ $line == "region" ]] && { REGION=(${line//=/ }); continue; }
+  [[ $line == "state_file_s3_bucket" ]] && { stateFileLine=(${line//=/ }); STATE_FILE_STORAGE_NAME=stateFileLine[1]; continue; }
+  [[ $line == "region" ]] && { regionLine=(${line//=/ }); REGION=regionLine[1] continue; }
   
 done < $TFVAR_FILE_PATH
 
-echo $STATE_FILE_STORAGE_NAME
-echo $REGION
 if [ -z "${STATE_FILE_STORAGE_NAME}" ]
 then
     STATE_FILE_STORAGE_NAME="tf-state-file-00001"
@@ -215,8 +213,8 @@ echoDefault "Started... [${CURRENT_DATE_TIME_STAMP}]"
 if [ "${_command}" == 'init' ]
 then
     terraform -chdir=${ENVIRONMENT_RESOURCES_FOLDER} init -upgrade=true -no-color -force-copy \
-        -backend-config bucket=${STATE_FILE_STORAGE_NAME[1]} \
-        -backend-config region=${REGION[1]} \
+        -backend-config bucket=${STATE_FILE_STORAGE_NAME} \
+        -backend-config region=${REGION} \
         -backend-config key=${STATE_FILE_NAME} > $_outputFilePath
 
 elif [ "${_command}" == 'plan' ]
