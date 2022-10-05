@@ -160,6 +160,9 @@ do
   
 done < $TFVAR_FILE_PATH
 
+echo $STATE_FILE_STORAGE_NAME
+echo $REGION
+
 case $_command in
   init)
     ;;
