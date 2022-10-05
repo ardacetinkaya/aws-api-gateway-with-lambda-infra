@@ -155,16 +155,28 @@ REGION=""
 
 while IFS= read -r line
 do
-  [[ $line == "state_file_s3_bucket" ]] && { stateFileLine=(${line//=/ }); STATE_FILE_STORAGE_NAME=stateFileLine[1]; continue; }
-  [[ $line == "region" ]] && { regionLine=(${line//=/ }); REGION=regionLine[1] continue; }
+    [[ $line == "state_file_s3_bucket"* ]] && { stateFileLine=(${line//=/ }); STATE_FILE_STORAGE_NAME=stateFileLine[1]; continue; }
+    [[ $line == "region"* ]] && { regionLine=(${line//=/ }); REGION=regionLine[1]; continue; }
   
 done < $TFVAR_FILE_PATH
 
-if [ -z "${STATE_FILE_STORAGE_NAME}" ]
-then
-    STATE_FILE_STORAGE_NAME="tf-state-file-00001"
-    REGION=$AWS_REGION
-fi
+# if [ -z "${STATE_FILE_STORAGE_NAME}" ]
+# then
+    
+#     if [ -z ${STATE_FILE_STORAGE_NAME+x} ]
+#     then 
+#         echoError "Invalid ENV value"; 
+#     else 
+#         STATE_FILE_STORAGE_NAME="tf-state-file-00001"
+#     fi
+
+#     if [ -z ${AWS_REGION+x} ]
+#     then 
+#         echoError "Invalid ENV value [Region]"; 
+#     else 
+#         REGION=$AWS_REGION
+#     fi
+# fi
 
 
 case $_command in
@@ -218,8 +230,7 @@ then
     terraform -chdir=${ENVIRONMENT_RESOURCES_FOLDER} plan -parallelism=20 \
         -no-color \
         -refresh=true \
-        -var-file=${TFVAR_FILE_PATH} \
-        # -var-file=${SENSITIVE_TFVAR_FILE_PATH} \
+        -var-file=${TFVAR_FILE_PATH} -var-file=${SENSITIVE_TFVAR_FILE_PATH} \
         -out=${_planFilePath} > ${_outputFilePath}
     
     briefOutput ${_outputFilePath}
