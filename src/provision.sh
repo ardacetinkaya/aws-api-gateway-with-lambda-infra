@@ -153,7 +153,6 @@ STATE_FILE_NAME="terraform.tfstate"
 STATE_FILE_STORAGE_NAME=""
 REGION=""
 
-echo "TFVAR FILE: ${TFVAR_FILE_PATH}"
 while IFS= read -r line
 do
   [[ $line == "state_file_s3_bucket" ]] && { stateFileLine=(${line//=/ }); STATE_FILE_STORAGE_NAME=stateFileLine[1]; continue; }
@@ -165,9 +164,6 @@ if [ -z "${STATE_FILE_STORAGE_NAME}" ]
 then
     STATE_FILE_STORAGE_NAME="tf-state-file-00001"
     REGION=$AWS_REGION
-
-    echo $STATE_FILE_STORAGE_NAME
-    echo $REGION
 fi
 
 
@@ -223,7 +219,7 @@ then
         -no-color \
         -refresh=true \
         -var-file=${TFVAR_FILE_PATH} \
-        -var-file=${SENSITIVE_TFVAR_FILE_PATH} \
+        # -var-file=${SENSITIVE_TFVAR_FILE_PATH} \
         -out=${_planFilePath} > ${_outputFilePath}
     
     briefOutput ${_outputFilePath}
