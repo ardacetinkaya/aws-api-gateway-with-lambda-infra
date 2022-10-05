@@ -1,0 +1,35 @@
+name: 'Terraform'
+
+on:
+  workflow_dispatch:
+    
+jobs:
+  terraform:
+    name: 'Terraform'
+    runs-on: ubuntu-latest
+    environment: production
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.2.9
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+    - name: Init
+      working-directory: ./src
+      run: ./provision.sh -a init -e test
+    - name: Plan
+      working-directory: ./src
+      run: ./provision.sh -a plan -e test
+
