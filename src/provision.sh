@@ -225,7 +225,7 @@ then
     terraform -chdir=${ENVIRONMENT_RESOURCES_FOLDER} init -upgrade=true -no-color -force-copy \
         -backend-config bucket=${STATE_FILE_STORAGE_NAME} \
         -backend-config region=${REGION} \
-        -backend-config key=${STATE_FILE_NAME} > $_outputFilePath
+        -backend-config key=${STATE_FILE_NAME} #> $_outputFilePath
 
 elif [ "${_command}" == 'plan' ]
 then
