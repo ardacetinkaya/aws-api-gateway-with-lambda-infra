@@ -2,19 +2,32 @@ name: 'Terraform'
 
 on:
   workflow_dispatch:
+    inputs:
+      environment:
+        description: Provisioning environment     
+        required: true
+        default: test
+      action:
+        type: choice
+        description: Terraform action
+        required: true
+        default: plan
+        options: 
+        - plan
+        - apply
 
 env:
-  AWS_REGION: eu-north-1                  # set this to your preferred AWS region, e.g. us-west-1
-  ECR_REPOSITORY: testartifacts           # set this to your Amazon ECR repository name
+  ENV_AWS_REGION: eu-north-1
+  ENV_STATE_FILE_STORAGE_NAME: tf-state-file-00001
 
 permissions:
   contents: read
 
 jobs:
   terraform:
-    name: 'Terraform'
+    name: 'Infra. provisioning w/ Terraform'
     runs-on: ubuntu-latest
-    environment: production
+    environment: ${{ github.event.inputs.environment }}
 
     defaults:
       run:
@@ -32,11 +45,11 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ env.AWS_REGION }}
+        aws-region: ${{ env.ENV_AWS_REGION }}
     - name: Init
       working-directory: ./src
-      run: ./provision.sh -a init -e test
-    - name: Plan
+      run: ./provision.sh -a init -e ${{ github.event.inputs.environment }}
+    - name: Action (${{ github.event.inputs.action }})
       working-directory: ./src
-      run: ./provision.sh -a plan -e test
+      run: ./provision.sh -a ${{ github.event.inputs.action }} -e ${{ github.event.inputs.environment }}
 
