@@ -160,25 +160,25 @@ do
   
 done < $TFVAR_FILE_PATH
 
-if [ -z "${STATE_FILE_STORAGE_NAME}" ]
-then
-    if [ -z ${ENV_STATE_FILE_STORAGE_NAME+x} ]
-    then 
-        echoError "Invalid ENV value [StorageName]"; 
-    else 
-        STATE_FILE_STORAGE_NAME=$ENV_STATE_FILE_STORAGE_NAME
-    fi
-fi
+# if [ -z "${STATE_FILE_STORAGE_NAME}" ]
+# then
+#     if [ -z ${ENV_STATE_FILE_STORAGE_NAME+x} ]
+#     then 
+#         echoError "Invalid ENV value [StorageName]"; 
+#     else 
+#         STATE_FILE_STORAGE_NAME=$ENV_STATE_FILE_STORAGE_NAME
+#     fi
+# fi
 
-if [ -z "${REGION}" ]
-then
-    if [ -z ${ENV_AWS_REGION+x} ]
-    then 
-        echoError "Invalid ENV value [Region]"; 
-    else 
-        REGION=$ENV_AWS_REGION
-    fi
-fi
+# if [ -z "${REGION}" ]
+# then
+#     if [ -z ${ENV_AWS_REGION+x} ]
+#     then 
+#         echoError "Invalid ENV value [Region]"; 
+#     else 
+#         REGION=$ENV_AWS_REGION
+#     fi
+# fi
 
 
 case $_command in
