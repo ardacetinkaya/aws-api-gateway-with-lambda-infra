@@ -232,7 +232,7 @@ then
     terraform -chdir=${ENVIRONMENT_RESOURCES_FOLDER} plan -parallelism=20 \
         -no-color \
         -refresh=true \
-        -var-file=${TFVAR_FILE_PATH} \ #-var-file=${SENSITIVE_TFVAR_FILE_PATH} \
+        -var-file=${TFVAR_FILE_PATH} \
         -out=${_planFilePath} > ${_outputFilePath}
     
     briefOutput ${_outputFilePath}
