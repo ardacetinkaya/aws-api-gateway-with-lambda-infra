@@ -155,8 +155,8 @@ REGION=""
 
 while IFS= read -r line
 do
-    [[ $line == "state_file_s3_bucket"* ]] && { stateFileLine=(${line//=/ }); STATE_FILE_STORAGE_NAME=$stateFileLine[1]; continue; }
-    [[ $line == "region"* ]] && { regionLine=(${line//=/ }); REGION=$regionLine[1]; continue; }
+    [[ $line == "state_file_s3_bucket"* ]] && { stateFileLine=(${line//=/ }); STATE_FILE_STORAGE_NAME=${stateFileLine[1]}; continue; }
+    [[ $line == "region"* ]] && { regionLine=(${line//=/ }); REGION=${regionLine[1]}; continue; }
   
 done < $TFVAR_FILE_PATH
 
