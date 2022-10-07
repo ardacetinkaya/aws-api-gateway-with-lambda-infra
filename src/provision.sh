@@ -76,6 +76,9 @@ help()
    echo ""
 }
 
+START_LINE=0
+END_LINE=0
+
 briefOutput() {
     planSummary=""
     resourceCreations=()
@@ -83,17 +86,20 @@ briefOutput() {
     resourceDestroys=()
     resourceDropCreates=()
 
-    echo $1
+    COUNT=0
     while IFS= read -r line
     do
-        echo $line
+        COUNT=$(($COUNT+1))
         [[ $line == *"+ resource "* ]] && { resourceCreations+=${line% *}"\n"; continue; }
         [[ $line == *"~ resource "* ]] && { resourceChanges+=${line% *}"\n"; continue; }
         [[ $line == "- resource "* ]] && {  resourceDestroys+=${line% *}"\n"; continue; }
         [[ $line == "+/- resource "* ]] && { resourceDropCreates+=${line% *}"\n"; continue; }
         
+        [[ $line == *"Terraform will perform the following actions"* ]] && { START_LINE=$COUNT; continue; }
+
         if [[ $line == *"Plan: "* ]]
         then
+            END_LINE=$COUNT
             planSummary+=($line)
             continue;
         elif [[ $line == "No changes. Your infrastructure matches the configuration."* ]]
@@ -240,11 +246,14 @@ then
         -out=${_planFilePath} > ${_outputFilePath}
     
     exitcode=$?
-    if [[ $exitcode -eq 2 ]]; then
-        echo '::set-output name=planHasChanges::true'
-        exit $exitcode
-    else
+
+    if [[ $exitcode -eq 0 ]]; then
         briefOutput ${_outputFilePath}
+        START_LINE=$(($START_LINE-1))
+        END_LINE=$(($END_LINE-1))
+        head -$END_LINE ${_outputFilePath} | tail -n $(($END_LINE-$START_LINE))
+    else
+        exit $exitcode
     fi
     
     
