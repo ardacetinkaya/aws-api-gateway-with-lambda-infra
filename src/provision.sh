@@ -249,9 +249,11 @@ then
 
     if [[ $exitcode -eq 0 ]]; then
         briefOutput ${_outputFilePath}
-        START_LINE=$(($START_LINE-1))
-        END_LINE=$(($END_LINE-1))
-        head -$END_LINE ${_outputFilePath} | tail -n $(($END_LINE-$START_LINE))
+        if [[ $START_LINE -gt 0 ]]; then
+            START_LINE=$(($START_LINE-1))
+            END_LINE=$(($END_LINE-1))
+            head -$END_LINE ${_outputFilePath} | tail -n $(($END_LINE-$START_LINE))
+        fi
     else
         exit $exitcode
     fi
@@ -259,6 +261,8 @@ then
     
 elif [ "${_command}" == 'apply' ]
 then
+    aws s3 cp s3://${STATE_FILE_STORAGE_NAME}/${_planFileName} ${PLANS_FOLDER_PATH}/
+
     set +e
     terraform -chdir="${ENVIRONMENT_RESOURCES_FOLDER}" apply -parallelism=2 \
         ${_planFilePath} \
@@ -279,7 +283,6 @@ then
 fi
 
 echoDefault "------------------------------------------------------------------------------"
-echoDefault "Plan: ${_planFilePath}"
 echoDefault "Log: ${_outputFilePath}"
 echoDefault "------------------------------------------------------------------------------"
 echoDefault "Finished.  [$(date '+%Y-%m-%d %H:%M:%S')]"
@@ -293,4 +296,7 @@ then
     echoDefault "       ./provision.sh -a apply -e ${_environment} -t ${CURRENT_TIMESTAMP}"
     echoDefault ""
     echoDefault "------------------------------------------------------------------------------"
+
+    aws s3 cp ${_planFilePath} s3://${STATE_FILE_STORAGE_NAME}/
+
 fi
