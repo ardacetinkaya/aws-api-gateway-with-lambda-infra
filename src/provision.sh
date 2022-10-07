@@ -243,7 +243,7 @@ then
         -no-color \
         -refresh=true \
         -var-file=${TFVAR_FILE_PATH} \
-        -out=${_planFilePath} > ${_outputFilePath}
+        -out=${_planFilePath} #> ${_outputFilePath}
     
     exitcode=$?
 
