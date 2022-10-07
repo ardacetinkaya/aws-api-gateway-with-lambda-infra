@@ -238,7 +238,8 @@ then
         -out=${_planFilePath} > ${_outputFilePath}
     
     briefOutput ${_outputFilePath}
-
+    echo $?
+    
 elif [ "${_command}" == 'apply' ]
 then
     set +e
