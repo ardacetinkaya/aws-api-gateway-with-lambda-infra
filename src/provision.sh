@@ -239,7 +239,14 @@ then
         -var-file=${TFVAR_FILE_PATH} \
         -out=${_planFilePath} > ${_outputFilePath}
     
-    briefOutput ${_outputFilePath}
+    exitcode=$?
+    if [[ $exitcode -eq 2 ]]; then
+        echo '::set-output name=planHasChanges::true'
+        exit $exitcode
+    else
+        briefOutput ${_outputFilePath}
+    fi
+    
     
 elif [ "${_command}" == 'apply' ]
 then
