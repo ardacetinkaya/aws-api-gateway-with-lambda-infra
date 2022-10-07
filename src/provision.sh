@@ -238,7 +238,7 @@ then
         -var-file=${TFVAR_FILE_PATH} \
         -out=${_planFilePath} > ${_outputFilePath}
     
-    briefOutput "${_outputFilePath}"
+    briefOutput ${_outputFilePath}
     
 elif [ "${_command}" == 'apply' ]
 then
