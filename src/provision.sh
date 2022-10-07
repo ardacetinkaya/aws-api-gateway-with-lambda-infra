@@ -86,7 +86,7 @@ briefOutput() {
     echo $1
     while IFS= read -r line
     do
-        echo "tst"
+        echo $line
         [[ $line == *"+ resource "* ]] && { resourceCreations+=${line% *}"\n"; continue; }
         [[ $line == *"~ resource "* ]] && { resourceChanges+=${line% *}"\n"; continue; }
         [[ $line == "- resource "* ]] && {  resourceDestroys+=${line% *}"\n"; continue; }
