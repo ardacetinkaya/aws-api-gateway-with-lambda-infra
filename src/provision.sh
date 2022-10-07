@@ -222,6 +222,7 @@ echoDefault "Started... [${CURRENT_DATE_TIME_STAMP}]"
 
 if [ "${_command}" == 'init' ]
 then
+    set +e
     terraform -chdir=${ENVIRONMENT_RESOURCES_FOLDER} init -upgrade=true -no-color -force-copy \
         -backend-config bucket="${STATE_FILE_STORAGE_NAME}" \
         -backend-config region="${REGION}" \
@@ -229,26 +230,30 @@ then
 
 elif [ "${_command}" == 'plan' ]
 then
+    set +e
     terraform -chdir=${ENVIRONMENT_RESOURCES_FOLDER} plan -parallelism=20 \
         -no-color \
         -refresh=true \
         -var-file=${TFVAR_FILE_PATH} \
-        -out=${_planFilePath} #> ${_outputFilePath}
+        -out=${_planFilePath} > ${_outputFilePath}
     
     briefOutput ${_outputFilePath}
 
 elif [ "${_command}" == 'apply' ]
 then
-      terraform -chdir="${ENVIRONMENT_RESOURCES_FOLDER}" apply -parallelism=2 \
+    set +e
+    terraform -chdir="${ENVIRONMENT_RESOURCES_FOLDER}" apply -parallelism=2 \
         ${_planFilePath} \
         -no-color > ${_outputFilePath}
 
 elif [ "${_command}" == 'validate' ]
 then
-      terraform -chdir="${ENVIRONMENT_RESOURCES_FOLDER}" validate -no-color
+    set +e
+    terraform -chdir="${ENVIRONMENT_RESOURCES_FOLDER}" validate -no-color
 elif [ "${_command}" == 'destroy' ]
 then
-      terraform -chdir="${ENVIRONMENT_RESOURCES_FOLDER}" destroy -no-color \
+    set +e
+    terraform -chdir="${ENVIRONMENT_RESOURCES_FOLDER}" destroy -no-color \
         -refresh=true \
         -var-file="$tfResourcesVarFilePath" \
         -var-file="$tfResourcesSensitiveVarFilePath" \
