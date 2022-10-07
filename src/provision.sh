@@ -83,6 +83,7 @@ briefOutput() {
     resourceDestroys=()
     resourceDropCreates=()
 
+    echo $1
     while IFS= read -r line
     do
         [[ $line == *"+ resource "* ]] && { resourceCreations+=${line% *}"\n"; continue; }
@@ -237,8 +238,7 @@ then
         -var-file=${TFVAR_FILE_PATH} \
         -out=${_planFilePath} > ${_outputFilePath}
     
-    briefOutput ${_outputFilePath}
-    echo $?
+    briefOutput "${_outputFilePath}"
     
 elif [ "${_command}" == 'apply' ]
 then
