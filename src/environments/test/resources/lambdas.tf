@@ -56,7 +56,7 @@ resource "aws_iam_policy" "ecr_policy_00" {
 
 resource "aws_lambda_function" "hello_lambda_v1" {
   function_name       = local.lambda.function_v1_name
-  filename            = "${path.module}/../../../functions/HelloLambda.v1/bin/Release/net6.0/HelloLambda.v1.zip"
+  filename            = "${path.module}/../../../artifacts/HelloLambda.v1.zip"
   role                = aws_iam_role.iam_for_HelloLambda.arn
   handler             = local.lambda.function_v1_name
   runtime             = local.lambda.runtime
@@ -64,7 +64,7 @@ resource "aws_lambda_function" "hello_lambda_v1" {
   memory_size         = local.lambda.memory_size
   timeout             = local.lambda.timeout
 
-  source_code_hash    = filebase64sha256("${path.module}/../../../functions/HelloLambda.v1/bin/Release/net6.0/HelloLambda.v1.zip")
+  source_code_hash    = filebase64sha256("${path.module}/../../../artifacts/HelloLambda.v1.zip")
   package_type        = "Zip"
 
   environment {
