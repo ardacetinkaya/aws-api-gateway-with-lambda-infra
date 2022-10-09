@@ -15,6 +15,10 @@ on:
         options: 
         - plan
         - apply
+      timestamp:
+        description: Timestamp for Apply action
+        required: false
+        default: ''
 
 env:
   ENV_AWS_REGION: eu-north-1
@@ -51,5 +55,11 @@ jobs:
       run: ./provision.sh -a init -e ${{ github.event.inputs.environment }}
     - name: Action (${{ github.event.inputs.action }})
       working-directory: ./src
-      run: ./provision.sh -a ${{ github.event.inputs.action }} -e ${{ github.event.inputs.environment }}
+      run: |
+        if [[ ${{ github.event.inputs.action }} == 'apply' && ${{ github.event.inputs.timestamp }} != '' ]]; then
+          ./provision.sh -a apply -e ${{ github.event.inputs.environment }} -t ${{ github.event.inputs.timestamp }}
+        else
+          ./provision.sh -a ${{ github.event.inputs.action }} -e ${{ github.event.inputs.environment }}
+        fi
+        
 
