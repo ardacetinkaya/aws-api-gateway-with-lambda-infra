@@ -1,6 +1,13 @@
 provider "aws" {
   region = var.region
   alias = "primary-region"
+
+  default_tags {
+    tags = {
+        Environment = "Test"
+        Project     = "Self-Learn"
+    }
+  }
 }
 
 terraform {  
