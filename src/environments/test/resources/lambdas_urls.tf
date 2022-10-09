@@ -26,6 +26,15 @@ resource "aws_lambda_function_url" "hello_lambda_v3_url" {
   ]
 }
 
+resource "aws_lambda_function_url" "hello_lambda_v4_url" {
+  function_name      = aws_lambda_function.hello_lambda_v4.function_name
+  authorization_type = "NONE"
+
+  depends_on = [
+    aws_lambda_function.hello_lambda_v4
+  ]
+}
+
 
 data "aws_lambda_function_url" "hello_lambda_v1_url" {
   function_name     = local.lambda.function_v1_name

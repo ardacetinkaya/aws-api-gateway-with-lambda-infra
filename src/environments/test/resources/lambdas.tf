@@ -1,11 +1,12 @@
 locals {
   lambda = {
-    function_v1_name   = "HelloLambda_v1"
-    function_v2_name   = "HelloLambda_v2"
-    function_v3_name   = "HelloLambda_v3"
-    runtime         = "dotnet6"
-    memory_size     = 128
-    timeout         = 10
+    function_v1_name    = "HelloLambda_v1"
+    function_v2_name    = "HelloLambda_v2"
+    function_v3_name    = "HelloLambda_v3"
+    function_v4_name    = "HelloLambda_v4"
+    runtime             = "dotnet6"
+    memory_size         = 128
+    timeout             = 10
   }
 }
 
@@ -122,4 +123,26 @@ resource "aws_lambda_function" "hello_lambda_v3" {
   provider = aws.primary-region
 }
 
+resource "aws_lambda_function" "hello_lambda_v4" {
+  function_name       = local.lambda.function_v4_name
+  role                = aws_iam_role.iam_for_HelloLambda.arn
+
+  memory_size         = local.lambda.memory_size
+  timeout             = local.lambda.timeout
+
+  package_type        = "Image"
+  image_uri           = "${aws_ecr_repository.test_repository.repository_url}:v4-latest"
+  image_config {
+    command = ["HelloLambda.v4::HelloLambda.v4.Function::FunctionHandler"]
+  }
+
+  environment {
+    variables = {
+      SomeEnvVariable="This is some ENV Value"
+      ASPNETCORE_ENVIRONMENT="Development"
+    }
+  }
+
+  provider = aws.primary-region
+}
 
