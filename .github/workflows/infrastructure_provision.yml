@@ -56,7 +56,7 @@ jobs:
     - name: Action (${{ github.event.inputs.action }})
       working-directory: ./src
       run: |
-        if [[ ${{ github.event.inputs.action }} == 'apply' && ${{ github.event.inputs.timestamp }} != '' ]]; then
+        if [[ "${{ github.event.inputs.action }}" == "apply" && "${{ github.event.inputs.timestamp }}" != "" ]]; then
           ./provision.sh -a apply -e ${{ github.event.inputs.environment }} -t ${{ github.event.inputs.timestamp }}
         else
           ./provision.sh -a ${{ github.event.inputs.action }} -e ${{ github.event.inputs.environment }}
