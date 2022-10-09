@@ -275,11 +275,9 @@ then
 elif [ "${_command}" == 'destroy' ]
 then
     set +e
-    terraform -chdir="${ENVIRONMENT_RESOURCES_FOLDER}" destroy -no-color \
-        -refresh=true -auto-approve \
-        -var-file=${TFVAR_FILE_PATH} > ${_outputFilePath}
+    terraform -chdir="${ENVIRONMENT_RESOURCES_FOLDER}" destroy -no-color -refresh=true -auto-approve \
+        -var-file=${TFVAR_FILE_PATH} > ${_outputFilePath} 
 
-    echoError "$(<${_outputFilePath})"
 fi
 
 echoDefault "------------------------------------------------------------------------------"
