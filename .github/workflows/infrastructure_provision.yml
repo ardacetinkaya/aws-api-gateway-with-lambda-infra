@@ -33,7 +33,6 @@ jobs:
     name: 'Terraform'
     runs-on: ubuntu-latest
     environment: production
-
     defaults:
       run:
         shell: bash
@@ -62,5 +61,14 @@ jobs:
         else
           ./provision.sh -a ${{ github.event.inputs.action }} -e ${{ github.event.inputs.environment }}
         fi
-        
-
+  deneme:
+    name: 'deneme'
+    runs-on: ubuntu-latest
+    environment: production
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: test
+        run: |
+          echo "test-321"
