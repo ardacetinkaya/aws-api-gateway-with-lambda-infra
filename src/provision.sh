@@ -243,20 +243,19 @@ then
         -no-color \
         -refresh=true \
         -var-file=${TFVAR_FILE_PATH} \
-        -out=${_planFilePath} > ${_outputFilePath}
+        -out=${_planFilePath} > ${_outputFilePath} 2>&1
     
     exitcode=$?
-
+    briefOutput ${_outputFilePath}
     if [[ $exitcode -eq 0 ]]; then
         echo '::set-output name=planHasChanges::true'
-        briefOutput ${_outputFilePath}
         if [[ $START_LINE -gt 0 ]]; then
             START_LINE=$(($START_LINE-1))
             END_LINE=$(($END_LINE-1))
             head -$END_LINE ${_outputFilePath} | tail -n $(($END_LINE-$START_LINE))
         fi
     else
-        echo '::set-output name=planHasChanges::true'
+        echoError "$(<${_outputFilePath})"
         exit $exitcode
     fi
     
