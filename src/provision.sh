@@ -195,11 +195,11 @@ case $_command in
   plan)
     _planFileName="${_environment}-${_command}-${CURRENT_TIMESTAMP}.tfplan"
     ;;
-  apply | destroy)
-     [ "${_timeStamp}" == "NO" ] && { echoError "Invalid timestamp for plan"; exit -999; }
+  apply)
+     [ "${_timeStamp}" == "NO" ] && { echoError "Invalid timestamp for ${_command}"; exit -999; }
     _planFileName="${_environment}-plan-${_timeStamp}.tfplan"
     ;;
-  validate)
+  validate | destroy)
     ;;
   *)
     echoError "Invalid action."
@@ -248,7 +248,6 @@ then
     exitcode=$?
     briefOutput ${_outputFilePath}
     if [[ $exitcode -eq 0 ]]; then
-        echo '::set-output name=planHasChanges::true'
         if [[ $START_LINE -gt 0 ]]; then
             START_LINE=$(($START_LINE-1))
             END_LINE=$(($END_LINE-1))
@@ -277,10 +276,8 @@ elif [ "${_command}" == 'destroy' ]
 then
     set +e
     terraform -chdir="${ENVIRONMENT_RESOURCES_FOLDER}" destroy -no-color \
-        -refresh=true \
-        -var-file="$tfResourcesVarFilePath" \
-        -var-file="$tfResourcesSensitiveVarFilePath" \
-        -auto-approve > ${_outputFilePath}
+        -refresh=true -auto-approve \
+        -var-file=${TFVAR_FILE_PATH} > ${_outputFilePath}
 fi
 
 echoDefault "------------------------------------------------------------------------------"
