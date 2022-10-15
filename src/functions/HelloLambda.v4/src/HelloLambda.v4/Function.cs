@@ -7,17 +7,31 @@ namespace HelloLambda.v4;
 
 public class Function
 {
-    
+
     /// <summary>
     /// A simple function that takes a string and returns both the upper and lower case version of the string.
     /// </summary>
     /// <param name="input"></param>
     /// <param name="context"></param>
     /// <returns></returns>
-    public Casing FunctionHandler(string input, ILambdaContext context)
+    public bool FunctionHandler(Message message, ILambdaContext context)
     {
-        return new Casing(input.ToLower(), input.ToUpper());
+        try
+        {
+            if (message == null || string.IsNullOrEmpty(message.Text)) throw new ArgumentNullException(nameof(message));
+            context.Logger.LogInformation($"Message is got: {message.Text})");
+            return true;
+        }
+        catch (System.Exception ex)
+        {
+            context.Logger.LogError(ex.Message);
+            return true;
+        }
+
     }
 }
 
-public record Casing(string Lower, string Upper);
+public class Message
+{
+    public string Text { get; set; }
+}

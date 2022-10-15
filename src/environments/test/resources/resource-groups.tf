@@ -7,12 +7,14 @@ resource "aws_resourcegroups_group" "test" {
   {
       "ResourceTypeFilters": [
           "AWS::S3::Bucket",
-          "AWS::Lambda::Function"
+          "AWS::Lambda::Function",
+          "AWS::ApiGateway::RestApi",
+          "AWS::ECR::Repository"
       ],
       "TagFilters": [
           {
           "Key": "Environment",
-          "Values": ["PoC"]
+          "Values": ["Test"]
           }
       ]
   }
