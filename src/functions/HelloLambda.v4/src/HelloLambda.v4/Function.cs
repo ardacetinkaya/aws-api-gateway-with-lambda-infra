@@ -56,6 +56,7 @@ public class Message
 [DynamoDBTable("Messages")]
 public class MessageData
 {
+    public Guid Id { get; private set; } = Guid.NewGuid();
     public string? Text { get; set; }
     public DateTimeOffset Date { get; set; } = DateTimeOffset.Now;
 }

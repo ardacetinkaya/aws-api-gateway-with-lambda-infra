@@ -9,7 +9,8 @@ resource "aws_resourcegroups_group" "test" {
           "AWS::S3::Bucket",
           "AWS::Lambda::Function",
           "AWS::ApiGateway::RestApi",
-          "AWS::ECR::Repository"
+          "AWS::ECR::Repository",
+          "AWS::DynamoDB::Table"
       ],
       "TagFilters": [
           {
