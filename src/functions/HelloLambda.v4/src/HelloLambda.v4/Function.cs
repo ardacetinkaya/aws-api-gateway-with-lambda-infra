@@ -33,7 +33,9 @@ public class Function
         {
             if (message == null || string.IsNullOrEmpty(message.Text)) throw new ArgumentNullException(nameof(message));
             context.Logger.LogInformation($"Message is got: {message.Text})");
-            await _context.SaveAsync<Message>(message);
+            await _context.SaveAsync<MessageData>(new MessageData{
+                Text = message.Text.Trim()
+            });
             context.Logger.LogInformation($"Message is saved.");
             return true;
         }
@@ -49,4 +51,11 @@ public class Function
 public class Message
 {
     public string? Text { get; set; }
+}
+
+[DynamoDBTable("Messages")]
+public class MessageData
+{
+    public string? Text { get; set; }
+    public DateTimeOffset Date { get; set; } = DateTimeOffset.Now;
 }
