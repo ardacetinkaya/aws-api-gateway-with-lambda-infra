@@ -28,7 +28,7 @@ resource "aws_iam_role" "iam_for_HelloLambda" {
 }
 EOF
   managed_policy_arns = [
-    aws_iam_policy.ecr_policy_00.arn,
+    aws_iam_policy.lambda_policy_00.arn,
     data.aws_iam_policy.AWSLambdaBasicExecutionRole.arn
   ]
 
@@ -38,8 +38,8 @@ data "aws_iam_policy" "AWSLambdaBasicExecutionRole" {
   name = "AWSLambdaBasicExecutionRole"
 }
 
-resource "aws_iam_policy" "ecr_policy_00" {
-  name = "ecr-policy-00"
+resource "aws_iam_policy" "lambda_policy_00" {
+  name = "general-policy"
 
   policy = jsonencode({
     "Version": "2012-10-17",
@@ -48,6 +48,12 @@ resource "aws_iam_policy" "ecr_policy_00" {
             "Sid": "VisualEditor0",
             "Effect": "Allow",
             "Action": "ecr:*",
+            "Resource": "*"
+        },
+        {
+            "Sid": "VisualEditor1",
+            "Effect": "Allow",
+            "Action": "dynamodb:*",
             "Resource": "*"
         }
       ]
@@ -146,3 +152,25 @@ resource "aws_lambda_function" "hello_lambda_v4" {
   provider = aws.primary-region
 }
 
+resource "aws_lambda_function" "hello_lambda_v4_zip" {
+  function_name       = "${local.lambda.function_v4_name}_zip"
+  filename            = "${path.module}/../../../artifacts/HelloLambda.v4.zip"
+  role                = aws_iam_role.iam_for_HelloLambda.arn
+  handler             = "HelloLambda.v4::HelloLambda.v4.Function::FunctionHandler"
+  runtime             = local.lambda.runtime
+
+  memory_size         = local.lambda.memory_size
+  timeout             = local.lambda.timeout
+
+  source_code_hash    = filebase64sha256("${path.module}/../../../artifacts/HelloLambda.v4.zip")
+  package_type        = "Zip"
+
+  environment {
+    variables = {
+      SomeEnvVariable="This is some ENV Value"
+      ASPNETCORE_ENVIRONMENT="Development"
+    }
+  }
+
+  provider = aws.primary-region
+}
