@@ -154,7 +154,6 @@ resource "aws_lambda_function" "hello_lambda_v4" {
 
 resource "aws_lambda_function" "hello_lambda_v4_zip" {
   function_name       = "${local.lambda.function_v4_name}_zip"
-  filename            = "${path.module}/../../../artifacts/HelloLambda.v4.zip"
   role                = aws_iam_role.iam_for_HelloLambda.arn
   handler             = "HelloLambda.v4::HelloLambda.v4.Function::FunctionHandler"
   runtime             = local.lambda.runtime
@@ -162,8 +161,10 @@ resource "aws_lambda_function" "hello_lambda_v4_zip" {
   memory_size         = local.lambda.memory_size
   timeout             = local.lambda.timeout
 
-  source_code_hash    = filebase64sha256("${path.module}/../../../artifacts/HelloLambda.v4.zip")
   package_type        = "Zip"
+
+  s3_bucket           = aws_s3_bucket_object.artifact.bucket
+  s3_key              = aws_s3_bucket_object.artifact.key
 
   environment {
     variables = {
@@ -173,4 +174,10 @@ resource "aws_lambda_function" "hello_lambda_v4_zip" {
   }
 
   provider = aws.primary-region
+}
+
+resource "aws_s3_bucket_object" "artifact" {
+  bucket = aws_s3_bucket.deployment_artifacts.bucket
+  key    = "HelloLambda.v4.zip"
+  source = "${path.module}/../../../artifacts/HelloLambda.v4.zip"
 }
