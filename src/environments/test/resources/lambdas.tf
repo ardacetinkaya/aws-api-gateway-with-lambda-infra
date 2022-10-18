@@ -163,8 +163,8 @@ resource "aws_lambda_function" "hello_lambda_v4_zip" {
 
   package_type        = "Zip"
 
-  s3_bucket           = aws_s3_bucket_object.artifact.bucket
-  s3_key              = aws_s3_bucket_object.artifact.key
+  s3_bucket           = aws_s3_object.artifact.bucket
+  s3_key              = aws_s3_object.artifact.key
 
   environment {
     variables = {
@@ -173,11 +173,21 @@ resource "aws_lambda_function" "hello_lambda_v4_zip" {
     }
   }
 
+  # layers = [ "${aws_lambda_layer_version.lambda_layer_01.arn}" ]
+
   provider = aws.primary-region
 }
 
-resource "aws_s3_bucket_object" "artifact" {
+resource "aws_s3_object" "artifact" {
   bucket = aws_s3_bucket.deployment_artifacts.bucket
   key    = "HelloLambda.v4.zip"
   source = "${path.module}/../../../artifacts/HelloLambda.v4.zip"
+  etag   = filemd5("${path.module}/../../../artifacts/HelloLambda.v4.zip")
 }
+
+# resource "aws_lambda_layer_version" "lambda_layer_01" {
+#   filename   = "${path.module}/../../../artifacts/Layer.v4.zip"
+#   layer_name = "layer_01"
+
+#   compatible_runtimes = ["dotnet6"]
+# }
