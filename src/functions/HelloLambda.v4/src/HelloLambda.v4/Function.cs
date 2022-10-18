@@ -3,6 +3,8 @@ using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.Lambda.Core;
 using Amazon.Runtime;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
@@ -11,14 +13,17 @@ namespace HelloLambda.v4;
 
 public class Function
 {
-    private readonly AmazonDynamoDBClient _client;
-    private readonly AmazonDynamoDBConfig _config;
-    private readonly AWSCredentials _AWSCredantials;
+    private readonly IAmazonDynamoDB _client;
     private readonly DynamoDBContext _context;
+    private readonly ILogger _logger;
 
     public Function()
     {
-        _client = new AmazonDynamoDBClient();
+        var startup = new Startup();
+        IServiceProvider provider = startup.ConfigureServices();
+
+        _client = provider.GetRequiredService<IAmazonDynamoDB>();
+        _logger = provider.GetRequiredService<ILogger>();
         _context = new DynamoDBContext(_client);
     }
     /// <summary>
