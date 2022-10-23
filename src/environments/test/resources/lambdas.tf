@@ -62,7 +62,7 @@ resource "aws_iam_policy" "lambda_policy_00" {
 
 resource "aws_lambda_function" "hello_lambda_v1" {
   function_name       = local.lambda.function_v1_name
-  filename            = "${path.module}/../../../artifacts/HelloLambda.v1.zip"
+  filename            = "${path.module}/../_temps/artifacts/HelloLambda.v1.zip"
   role                = aws_iam_role.iam_for_HelloLambda.arn
   handler             = local.lambda.function_v1_name
   runtime             = local.lambda.runtime
@@ -70,7 +70,7 @@ resource "aws_lambda_function" "hello_lambda_v1" {
   memory_size         = local.lambda.memory_size
   timeout             = local.lambda.timeout
 
-  source_code_hash    = filebase64sha256("${path.module}/../../../artifacts/HelloLambda.v1.zip")
+  source_code_hash    = filebase64sha256("${path.module}/../_temps/artifacts/HelloLambda.v1.zip")
   package_type        = "Zip"
 
   environment {
@@ -181,8 +181,8 @@ resource "aws_lambda_function" "hello_lambda_v4_zip" {
 resource "aws_s3_object" "artifact" {
   bucket = aws_s3_bucket.deployment_artifacts.bucket
   key    = "HelloLambda.v4.zip"
-  source = "${path.module}/../../../artifacts/HelloLambda.v4.zip"
-  etag   = filemd5("${path.module}/../../../artifacts/HelloLambda.v4.zip")
+  source = "${path.module}/../_temps/artifacts/HelloLambda.v4.zip"
+  etag   = filemd5("${path.module}/../_temps/artifacts/HelloLambda.v4.zip")
 }
 
 # resource "aws_lambda_layer_version" "lambda_layer_01" {
