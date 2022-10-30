@@ -21,6 +21,15 @@ CYAN='\033[0;36m'
 WHITE='\033[1;37m'
 CLEAR_COLOR='\033[0m'
 
+
+RESOURCES_FOLDER="resources"
+PLANS_FOLDER="_plans"
+TEMPS_FOLDER="_temps"
+OUTPUTS_FOLDER="_outputs"
+
+VARIABLES_FILE="terraform.tfvars"
+SENSITIVE_VARIABLES_FILE="sensitive.auto.tfvars"
+
 _commandIsSet=false
 _environmentIsSet=false
 _planFilePath=""
@@ -169,28 +178,30 @@ main() {
         exit -999
     fi
 
-    ENVIRONMENT_FOLDER=${ENVIRONMENTS_FOLDER}'/'${_environment}
-    ENVIRONMENT_RESOURCES_FOLDER=${ENVIRONMENT_FOLDER}'/resources'
-    PLANS_FOLDER_PATH=${ENVIRONMENT_FOLDER}'/_plans'
-    TEMP_FOLDER_PATH=${ENVIRONMENT_FOLDER}'/_temps'
-    OUTPUTS_FOLDER_PATH=${ENVIRONMENT_FOLDER}'/_outputs'
+    _environmentFolder=${ENVIRONMENTS_FOLDER}'/'${_environment}
+    _environmentResourcesFolder=${_environmentFolder}'/'${RESOURCES_FOLDER}
+    _plansFolderPath=${_environmentFolder}'/'${PLANS_FOLDER}
+    _tempsFolderPath=${_environmentFolder}'/'${TEMPS_FOLDER}
+    _outputsFolderPath=${_environmentFolder}'/'${OUTPUTS_FOLDER}
 
-    TFVAR_FILE_PATH=${ENVIRONMENT_RESOURCES_FOLDER}'/terraform.tfvars'
-    SENSITIVE_TFVAR_FILE_PATH=${ENVIRONMENT_RESOURCES_FOLDER}'/sensitive.auto.tfvars'
+    _terraformVariablesFilePath=${_environmentResourcesFolder}'/'${VARIABLES_FILE}
+    _terraformSensitiveVariablesFilePath=${_environmentResourcesFolder}'/'${SENSITIVE_VARIABLES_FILE}
 
     while IFS= read -r line; do
+
         [[ $line == "state_file_s3_bucket"* ]] && {
             stateFileLine=(${line//=/ })
             _stateFileStorageName="${stateFileLine[1]//\"/}"
             continue
         }
+
         [[ $line == "region"* ]] && {
             regionLine=(${line//=/ })
             _region="${regionLine[1]//\"/}"
             continue
         }
 
-    done <$TFVAR_FILE_PATH
+    done <$_terraformVariablesFilePath
 
     case $_command in
     init) ;;
@@ -215,51 +226,51 @@ main() {
 
     _outputFileName="${_environment}-${_command}-${CURRENT_TIMESTAMP}.log"
 
-    if [[ ! -d ${ENVIRONMENT_FOLDER} ]]; then
-        echoError "Directory ${PLANS_FOLDER_PATH} DOES NOT exists. Please create environment folder."
+    if [[ ! -d ${_environmentFolder} ]]; then
+        echoError "Directory ${_plansFolderPath} DOES NOT exists. Please create environment folder."
         exit -990
     fi
 
-    [[ ! -d ${PLANS_FOLDER_PATH} ]] && {
-        mkdir ${PLANS_FOLDER_PATH}
-        echoMessage "${PLANS_FOLDER_PATH} is created."
+    [[ ! -d ${_plansFolderPath} ]] && {
+        mkdir ${_plansFolderPath}
+        echoMessage "${_plansFolderPath} is created."
     }
 
-    [[ ! -d ${TEMP_FOLDER_PATH} ]] && {
-        mkdir ${TEMP_FOLDER_PATH}
-        echoMessage "${TEMP_FOLDER_PATH} is created."
+    [[ ! -d ${_tempsFolderPath} ]] && {
+        mkdir ${_tempsFolderPath}
+        echoMessage "${_tempsFolderPath} is created."
     }
 
-    [[ ! -d ${OUTPUTS_FOLDER_PATH} ]] && {
-        mkdir ${OUTPUTS_FOLDER_PATH}
-        echoMessage "${OUTPUTS_FOLDER_PATH} is created."
+    [[ ! -d ${_outputsFolderPath} ]] && {
+        mkdir ${_outputsFolderPath}
+        echoMessage "${_outputsFolderPath} is created."
     }
 
-    [[ ! -d ${OUTPUTS_FOLDER_PATH}/${CURRENT_DATE_FOLDER_NAME} ]] && {
-        mkdir ${OUTPUTS_FOLDER_PATH}/${CURRENT_DATE_FOLDER_NAME}
-        echoMessage "${OUTPUTS_FOLDER_PATH}/${CURRENT_DATE_FOLDER_NAME} is created."
+    [[ ! -d ${_outputsFolderPath}/${CURRENT_DATE_FOLDER_NAME} ]] && {
+        mkdir ${_outputsFolderPath}/${CURRENT_DATE_FOLDER_NAME}
+        echoMessage "${_outputsFolderPath}/${CURRENT_DATE_FOLDER_NAME} is created."
     }
 
-    OUTPUTS_FOLDER_PATH="${OUTPUTS_FOLDER_PATH}/${CURRENT_DATE_FOLDER_NAME}"
+    _outputsFolderPath="${_outputsFolderPath}/${CURRENT_DATE_FOLDER_NAME}"
 
-    _outputFilePath="${OUTPUTS_FOLDER_PATH}/${_outputFileName}"
-    _planFilePath="${PLANS_FOLDER_PATH}/${_planFileName}"
+    _outputFilePath="${_outputsFolderPath}/${_outputFileName}"
+    _planFilePath="${_plansFolderPath}/${_planFileName}"
 
     echoDefault "Started... [${CURRENT_DATE_TIME_STAMP}]"
 
     if [[ "${_command}" == 'init' ]]; then
         set +e
-        terraform -chdir=${ENVIRONMENT_RESOURCES_FOLDER} init -upgrade=true -no-color -force-copy \
+        terraform -chdir=${_environmentResourcesFolder} init -upgrade=true -no-color -force-copy \
             -backend-config bucket="${_stateFileStorageName}" \
             -backend-config region="${_region}" \
             -backend-config key=${STATE_FILE_NAME} >$_outputFilePath
 
     elif [[ "${_command}" == 'plan' ]]; then
         set +e
-        terraform -chdir=${ENVIRONMENT_RESOURCES_FOLDER} plan -parallelism=20 \
+        terraform -chdir=${_environmentResourcesFolder} plan -parallelism=20 \
             -no-color \
             -refresh=true \
-            -var-file=${TFVAR_FILE_PATH} \
+            -var-file=${_terraformVariablesFilePath} \
             -out=${_planFilePath} >${_outputFilePath} 2>&1
 
         exitcode=$?
@@ -277,20 +288,20 @@ main() {
 
     elif [[ "${_command}" == 'apply' ]]; then
 
-        aws s3 cp s3://${_stateFileStorageName}/${_planFileName} ${PLANS_FOLDER_PATH}/
+        aws s3 cp s3://${_stateFileStorageName}/${_planFileName} ${_plansFolderPath}/
 
         set +e
-        terraform -chdir="${ENVIRONMENT_RESOURCES_FOLDER}" apply -parallelism=2 \
+        terraform -chdir="${_environmentResourcesFolder}" apply -parallelism=2 \
             ${_planFilePath} \
             -no-color >${_outputFilePath}
 
     elif [[ "${_command}" == 'validate' ]]; then
         set +e
-        terraform -chdir="${ENVIRONMENT_RESOURCES_FOLDER}" validate -no-color
+        terraform -chdir="${_environmentResourcesFolder}" validate -no-color
     elif [[ "${_command}" == 'destroy' ]]; then
         set +e
-        terraform -chdir="${ENVIRONMENT_RESOURCES_FOLDER}" destroy -no-color -refresh=true -auto-approve \
-            -var-file=${TFVAR_FILE_PATH} >${_outputFilePath}
+        terraform -chdir="${_environmentResourcesFolder}" destroy -no-color -refresh=true -auto-approve \
+            -var-file=${_terraformVariablesFilePath} >${_outputFilePath}
 
     fi
 
