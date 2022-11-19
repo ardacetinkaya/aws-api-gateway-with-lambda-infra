@@ -1,6 +1,8 @@
-## A learning journey for AWS API Gateway and Lambda w/ Terraform
+# A simple AWS learning journey with some AWS resources
 
-- I don't have any experience with `AWS Lambda` and `AWS API Gateway` so far.
+## AWS Lambda
+
+- I don't have some much experience with `AWS Lambda` and `AWS API Gateway` so far.
     - So this is a simple repo. that I try to dig a little more. 😀🧑🏻‍💻
 - For `AWS Lambda` functions I have choosen .NET Platform to see what is required for .NET aspect
     - I have also tried `Amazon.Lambda.Tools` tool for .NET
@@ -16,7 +18,14 @@
 - All provision is done with a bash `provision.sh`
     - It is a simple wrapper for `terraform` to have easy management of resource provosioning
 
-### Folder structure
+### Functions
+----------------------
+- Different .NET application models are used for `AWS Lambda`
+- Within some `AWS Lambda` requierments different kind of APIs and models are required
+  - To check models, we need to check and understand new `dotnet project templates`
+
+
+## Folder structure
 
 ```yaml
 - src
@@ -37,14 +46,9 @@
 --- provision.sh  # bash script to run terraform commands
 ```
 
-### Functions
-----------------------
-- Different .NET application models are used for `AWS Lambda`
-- Within some `AWS Lambda` requierments different kind of APIs and models are required
-  - To check models, we need to check and understand new `dotnet project templates`
+## Provisioning the resources
 
-### Provisioning the resources
-----------------------
+
 - I have created a simple `bash` script to wrap `terraform`
     - I don't have some much experience with writing `a good` bash script, so please feel free to help me do 😀 😀 😀
     
