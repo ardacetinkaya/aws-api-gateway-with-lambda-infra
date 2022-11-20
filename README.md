@@ -4,6 +4,8 @@
 
 - It's a service for having long running services. With `Fargate` it is possible to run jobs as container images.
 
+- With EventBridgee(ex-CloudWatch events) it is possible to have scheduled runs
+
 ## AWS Lambda
 
 - I don't have some much experience with `AWS Lambda` and `AWS API Gateway` so far.
