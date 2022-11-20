@@ -2,6 +2,8 @@
 
 ## AWS Batch
 
+- It's a service for having long running services. With `Fargate` it is possible to run jobs as container images.
+
 ## AWS Lambda
 
 - I don't have some much experience with `AWS Lambda` and `AWS API Gateway` so far.
