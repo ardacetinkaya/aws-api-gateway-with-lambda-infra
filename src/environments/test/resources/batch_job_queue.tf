@@ -1,5 +1,5 @@
 resource "aws_batch_job_queue" "job_queue_01" {
-  name     = "batch-job-queue-01"
+  name     = "${local.job_queue_name}"
   state    = "ENABLED"
   priority = 1
 
