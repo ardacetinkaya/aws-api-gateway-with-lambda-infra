@@ -52,7 +52,6 @@
 
 
 - I have created a simple `bash` script to wrap `terraform`
-    - I don't have some much experience with writing `a good` bash script, so please feel free to help me do 😀 😀 😀
     
 - Execute the following command to take a `plan` for `test` environment
 
