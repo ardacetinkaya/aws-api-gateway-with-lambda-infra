@@ -1,4 +1,6 @@
-# A simple AWS learning journey with some AWS resources
+# A simple AWS learning journey
+
+## AWS Batch
 
 ## AWS Lambda
 
