@@ -54,6 +54,7 @@ data "aws_iam_policy_document" "assume_role_policy_policy" {
     }
   }
 
+  # Required for new EventBridge Scheduler
   statement {
     actions = ["sts:AssumeRole"]
 
@@ -62,6 +63,18 @@ data "aws_iam_policy_document" "assume_role_policy_policy" {
     principals {
       type        = "Service"
       identifiers = ["scheduler.amazonaws.com"]
+    }
+  }
+
+  # Required for CloudWatch Event Rule
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["events.amazonaws.com"]
     }
   }
 }
@@ -77,6 +90,7 @@ resource "aws_iam_policy" "batch_policy_01" {
         "Effect" : "Allow",
         "Action" : "batch:SubmitJob",
         "Resource" : [
+          "arn:aws:batch:${var.region}:${data.aws_caller_identity.current.account_id}:job/test01",
           "arn:aws:batch:${var.region}:${data.aws_caller_identity.current.account_id}:job-definition/${local.job_definitioin_name}",
           "arn:aws:batch:${var.region}:${data.aws_caller_identity.current.account_id}:job-definition/${local.job_definitioin_name}:*",
           "arn:aws:batch:${var.region}:${data.aws_caller_identity.current.account_id}:job-queue/${local.job_queue_name}"
