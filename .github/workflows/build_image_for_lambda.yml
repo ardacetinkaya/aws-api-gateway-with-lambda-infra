@@ -5,11 +5,15 @@
 #    Replace the value of the `ECR_REPOSITORY` environment variable in the workflow below with your repository's name.
 #    Replace the value of the `AWS_REGION` environment variable in the workflow below with your repository's region.
 
-name: Docker build for v2 to Amazon ECR
+name: Build functions as Docker Image for Lambda 
 
 on: 
   workflow_dispatch:
     inputs:
+      lambda:
+        description: 'Which function?'     
+        required: true
+        default: 'v2'
       tag:
         description: 'Custom Tag for image'     
         required: true
@@ -19,10 +23,6 @@ on:
         required: false
         type: boolean
         default: true
-  # push:
-  #   branches: [ "main" ]
-  #   paths:
-  #     - "src/functions/HelloLambda.v2/src/**"
 
 env:
   AWS_REGION: eu-north-1                  # set this to your preferred AWS region, e.g. us-west-1
@@ -54,16 +54,16 @@ jobs:
 
     - name: Build, tag, and push image to Amazon ECR
       id: build-image
-      working-directory: ./src/functions/HelloLambda.v2/src/HelloLambda.v2
+      working-directory: ./src/functions/HelloLambda.${{ github.event.inputs.lambda }}/src/HelloLambda.${{ github.event.inputs.lambda }}
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: v2-${{ github.sha }}
+        IMAGE_TAG: ${{ github.event.inputs.lambda }}-${{ github.sha }}
       run: |
         tag='unknown'
         if [[ ${{ github.event.inputs.use-fixed-tag }} != true ]]; then
-          tag='v2-${{ github.sha }}'
+          tag='${{ github.event.inputs.lambda }}-${{ github.sha }}'
         else
-          tag='v2-latest'
+          tag='${{ github.event.inputs.lambda }}-latest'
         fi
         # Build a docker container and push it to ECR
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$tag .
