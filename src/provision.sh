@@ -261,9 +261,7 @@ main() {
     if [[ "${_command}" == 'init' ]]; then
         set +e
         terraform -chdir=${_environmentResourcesFolder} init -upgrade=true -no-color -force-copy \
-            -backend-config bucket="${_stateFileStorageName}" \
-            -backend-config region="${_region}" \
-            -backend-config key=${STATE_FILE_NAME} >$_outputFilePath
+            -backend-config="./backend/config.cfg" >$_outputFilePath
 
     elif [[ "${_command}" == 'plan' ]]; then
         set +e
