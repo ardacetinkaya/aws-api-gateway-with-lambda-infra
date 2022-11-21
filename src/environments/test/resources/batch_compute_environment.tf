@@ -9,7 +9,7 @@ resource "aws_batch_compute_environment" "some_batch_compute_01" {
     ]
 
     subnets = [
-      data.aws_subnet.main_network_01_subnet_01.id
+      aws_subnet.subnet_01.id
     ]
     type = "FARGATE"
   }
@@ -23,7 +23,7 @@ resource "aws_batch_compute_environment" "some_batch_compute_01" {
 
 resource "aws_security_group" "some_batch_compute_01_sg_01" {
   name    = "some_batch_compute_01_sg_01"
-  vpc_id  = data.aws_vpc.main_network_01.id
+  vpc_id  = aws_vpc.main.id
   egress {
     from_port   = 0
     to_port     = 0

@@ -1,6 +1,7 @@
 resource "aws_cloudwatch_event_rule" "cloudwatch_event_rule" {
   name                = "batch-exec"
   schedule_expression = "cron(16,20,28 21-23 * * ? *)"
+  is_enabled          = false
 }
 
 resource "aws_cloudwatch_event_target" "batch_target" {

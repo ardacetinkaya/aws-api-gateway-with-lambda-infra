@@ -21,17 +21,3 @@ terraform {
 }
 
 data "aws_caller_identity" "current" {}
-
-data "aws_vpc" "main_network_01" {
-  filter {
-    name   = "tag:Name"
-    values = ["main_network"]
-  }
-}
-
-data "aws_subnet" "main_network_01_subnet_01" {
-  filter {
-    name   = "tag:Name"
-    values = ["main_subnet_#01"]
-  }
-}
