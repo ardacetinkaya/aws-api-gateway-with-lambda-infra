@@ -13,5 +13,5 @@ resource "aws_dynamodb_table" "messages_table" {
     name = "Date"
     type = "S"
   }
-
+  provider = aws.primary-region
 }

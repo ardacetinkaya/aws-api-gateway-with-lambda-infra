@@ -31,6 +31,8 @@ resource "aws_batch_job_definition" "job_definition_01" {
       assignPublicIp = "ENABLED"
     }
   })
+
+  provider = aws.primary-region
 }
 
 resource "aws_cloudwatch_log_group" "job_definition_01_log_group_01" {

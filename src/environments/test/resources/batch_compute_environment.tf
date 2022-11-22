@@ -16,6 +16,7 @@ resource "aws_batch_compute_environment" "some_batch_compute_01" {
 
   type         = "MANAGED"
   
+  provider = aws.primary-region
   depends_on = [
     aws_security_group.some_batch_compute_01_sg_01
   ]
