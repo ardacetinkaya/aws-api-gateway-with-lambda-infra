@@ -25,11 +25,7 @@ resource "aws_cloudwatch_event_rule" "cloudwatch_event_rule_01" {
   event_pattern = <<EOF
 {
   "source": ["aws.s3"],
-  "detail-type": ["Object Created"],
-  "detail": {
-    "eventName": ["ObjectCreated:*"],
-    "eventSource": ["s3.amazonaws.com"]
-  }
+  "detail-type": ["Object Created"]
 }
 EOF
 

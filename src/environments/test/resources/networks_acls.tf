@@ -44,6 +44,15 @@ resource "aws_network_acl" "acl_01" {
     from_port  = 80
     to_port    = 80
   }
+  
+  ingress {
+    protocol   = "tcp"
+    rule_no    = 210
+    action     = "allow"
+    cidr_block = local.cidr_block 
+    from_port  = 443
+    to_port    = 443
+  }
     
   # allow egress port 22 
   egress {
@@ -63,6 +72,15 @@ resource "aws_network_acl" "acl_01" {
     cidr_block = local.cidr_block
     from_port  = 80  
     to_port    = 80 
+  }
+
+  egress {
+    protocol   = "tcp"
+    rule_no    = 210
+    action     = "allow"
+    cidr_block = local.cidr_block
+    from_port  = 443  
+    to_port    = 443
   }
  
 	provider = aws.primary-region
