@@ -6,6 +6,11 @@
 
 - With EventBridgee(ex-CloudWatch events) it is possible to have scheduled runs
 
+## AWS EventBridge
+
+- Event Bus
+- Rules
+ - Targets
 ## AWS VPC
 
 ## AWS Lambda
