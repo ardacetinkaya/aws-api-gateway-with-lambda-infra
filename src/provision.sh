@@ -205,7 +205,7 @@ main() {
 
     case $_command in
     init) ;;
-
+    import) ;;
     plan)
         _planFileName="${_environment}-${_command}-${CURRENT_TIMESTAMP}.tfplan"
         ;;
@@ -296,6 +296,9 @@ main() {
     elif [[ "${_command}" == 'validate' ]]; then
         set +e
         terraform -chdir="${_environmentResourcesFolder}" validate -no-color
+    elif [[ "${_command}" == 'import' ]]; then
+        # set +e
+        # terraform -chdir="${_environmentResourcesFolder}" import ----
     elif [[ "${_command}" == 'destroy' ]]; then
         set +e
         terraform -chdir="${_environmentResourcesFolder}" destroy -no-color -refresh=true -auto-approve \
