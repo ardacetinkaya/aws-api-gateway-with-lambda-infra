@@ -296,7 +296,7 @@ main() {
     elif [[ "${_command}" == 'validate' ]]; then
         set +e
         terraform -chdir="${_environmentResourcesFolder}" validate -no-color
-    elif [[ "${_command}" == 'import' ]]; then
+    # elif [[ "${_command}" == 'import' ]]; then
         # set +e
         # terraform -chdir="${_environmentResourcesFolder}" import ----
     elif [[ "${_command}" == 'destroy' ]]; then
