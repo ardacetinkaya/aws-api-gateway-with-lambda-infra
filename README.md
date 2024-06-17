@@ -103,3 +103,8 @@
 
     > ./provision.sh -a apply -e test -t 1664270851
 
+
+### Infrastructure model
+![Infrastructure main model](.infragenie/infrastructure_main_model.svg)
+
+---
