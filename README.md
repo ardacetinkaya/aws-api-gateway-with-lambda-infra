@@ -103,3 +103,6 @@
 
     > ./provision.sh -a apply -e test -t 1664270851
 
+
+### Infrastructure model
+![ardacetinkaya_some-aws-journey](https://github.com/ardacetinkaya/some-aws-journey/assets/173192552/70454479-6323-4950-8f70-c443b643ba73)
